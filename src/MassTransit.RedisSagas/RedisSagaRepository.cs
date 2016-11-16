@@ -39,12 +39,12 @@ namespace MassTransit.RedisSagas
 
             if (policy.PreInsertInstance(context, out instance))
             {
-                PreInsertSagaInstance(context, instance);
+                PreInsertSagaInstance(redis, context, instance);
             }
 
             if (instance == null)
             {
-                instance = redis.Get<TSaga>(context.CorrelationId.ToString());
+                instance = redis.Get<TSaga>(sagaId);
             }
 
             if (instance == null)
@@ -88,7 +88,8 @@ namespace MassTransit.RedisSagas
         {
             var db = _redis.GetDatabase();
 
-            var old = db.Get<TSaga>(instance.CorrelationId.ToString());
+            instance.Version++;
+            var old = db.Get<TSaga>(instance.CorrelationId);
             if (old.Version > instance.Version)
                 throw new RedisSagaConcurrencyException($"Version conflict for saga with id {instance.CorrelationId}");
 
@@ -103,14 +104,15 @@ namespace MassTransit.RedisSagas
 
         public TSaga GetSaga(Guid correlationId)
         {
-            return _redis.GetDatabase().Get<TSaga>(correlationId);
+            var saga = _redis.GetDatabase().Get<TSaga>(correlationId);
+            return saga;
         }
 
-        private void PreInsertSagaInstance<T>(ConsumeContext<T> context, TSaga instance) where T : class
+        private void PreInsertSagaInstance<T>(IDatabase db, ConsumeContext<T> context, TSaga instance) where T : class
         {
             try
             {
-                _redis.GetDatabase().Add(context.CorrelationId.ToString(), instance);
+                db.Add(context.CorrelationId.ToString(), instance);
 
                 _log.DebugFormat("SAGA:{0}:{1} Insert {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId, TypeMetadataCache<T>.ShortName);
             }

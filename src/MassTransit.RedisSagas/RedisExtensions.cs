@@ -8,15 +8,15 @@ namespace MassTransit.RedisSagas
 {
     public static class RedisExtensions
     {
-
         /// <summary>
-		///     Get the object with the specified key from Redis database
-		/// </summary>
-		/// <typeparam name="T">The type of the expected object</typeparam>
-		/// <param name="key">The cache key.</param>
-		/// <returns>
-		///     Null if not present, otherwise the instance of T.
-		/// </returns>
+        ///     Get the object with the specified key from Redis database
+        /// </summary>
+        /// <typeparam name="T">The type of the expected object</typeparam>
+        /// <param name="db"></param>
+        /// <param name="key">The cache key.</param>
+        /// <returns>
+        ///     Null if not present, otherwise the instance of T.
+        /// </returns>
         public static T Get<T>(this IDatabase db, string key)
         {
             var valueBytes = db.StringGet(key);
@@ -27,6 +27,7 @@ namespace MassTransit.RedisSagas
         ///     Get the object with the specified key from Redis database
         /// </summary>
         /// <typeparam name="T">The type of the expected object</typeparam>
+        /// <param name="db"></param>
         /// <param name="key">The cache key.</param>
         /// <returns>
         ///     Null if not present, otherwise the instance of T.
@@ -42,6 +43,7 @@ namespace MassTransit.RedisSagas
         ///     Get the object with the specified key from Redis database
         /// </summary>
         /// <typeparam name="T">The type of the expected object</typeparam>
+        /// <param name="database"></param>
         /// <param name="key">The cache key.</param>
         /// <returns>
         ///     Null if not present, otherwise the instance of T.
@@ -60,15 +62,16 @@ namespace MassTransit.RedisSagas
 
 
         /// <summary>
-		///     Adds the specified instance to the Redis database.
-		/// </summary>
-		/// <typeparam name="T">The type of the class to add to Redis</typeparam>
-		/// <param name="key">The cache key.</param>
-		/// <param name="value">The instance of T.</param>
-		/// <returns>
-		///     True if the object has been added. Otherwise false
-		/// </returns>
-		public static bool Add<T>(this IDatabase database, string key, T value)
+        ///     Adds the specified instance to the Redis database.
+        /// </summary>
+        /// <typeparam name="T">The type of the class to add to Redis</typeparam>
+        /// <param name="database"></param>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The instance of T.</param>
+        /// <returns>
+        ///     True if the object has been added. Otherwise false
+        /// </returns>
+        public static bool Add<T>(this IDatabase database, string key, T value)
         {
             var entryBytes = JsonConvert.SerializeObject(value);
 
@@ -79,7 +82,7 @@ namespace MassTransit.RedisSagas
         ///     Adds the specified instance to the Redis database.
         /// </summary>
         /// <typeparam name="T">The type of the class to add to Redis</typeparam>
-        /// <param name="key">The cache key.</param>
+        /// <param name="database"></param>
         /// <param name="value">The instance of T.</param>
         /// <returns>
         ///     True if the object has been added. Otherwise false

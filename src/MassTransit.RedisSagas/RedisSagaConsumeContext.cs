@@ -15,7 +15,7 @@ namespace MassTransit.RedisSagas
     {
 
         private static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
-        IConnectionMultiplexer _redis;
+        private readonly IConnectionMultiplexer _redis;
 
         public RedisSagaConsumeContext(IConnectionMultiplexer redis, ConsumeContext<TMessage> context, TSaga saga) : base(context)
         {
@@ -40,7 +40,7 @@ namespace MassTransit.RedisSagas
 
             client.KeyDelete(Saga.CorrelationId.ToString());
 
-                IsCompleted = true;
+            IsCompleted = true;
 
             if (Log.IsDebugEnabled)
                 Log.DebugFormat("SAGA:{0}:{1} Removed {2}", TypeMetadataCache<TSaga>.ShortName, TypeMetadataCache<TMessage>.ShortName,
