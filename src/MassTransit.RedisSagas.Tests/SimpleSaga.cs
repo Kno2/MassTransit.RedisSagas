@@ -10,10 +10,10 @@ namespace MassTransit.RedisSagas.Tests
     //Observes<ObservableSagaMessage, SimpleSaga>,
     ISaga, IVersionedSaga
     {
-        public bool Completed { get; private set; }
-        public bool Initiated { get; private set; }
-        public bool Observed { get; private set; }
-        public string Name { get; private set; }
+        public bool Completed { get; set; }
+        public bool Initiated { get; set; }
+        public bool Observed { get; set; }
+        public string Name { get; set; }
 
         public async Task Consume(ConsumeContext<InitiateSimpleSaga> context)
         {
