@@ -1,7 +1,13 @@
 # MassTransit.RedisSagas
 StackExchange Redis Saga Persistence for MassTransit
 
+[![Build status](https://ci.appveyor.com/api/projects/status/e0l18q0tjonu896p?svg=true)](https://ci.appveyor.com/project/ryankelley/masstransit-redissagas)
+
 This library uses `StackExchange.Redis` to connect to your redis instance. Refer to the StackExchange Documentation for more detail on configuring your client.
+
+###Installation
+
+Install using nuget: `Install-Package MassTransit.RedisSagas`
 
 ###Usage
 
