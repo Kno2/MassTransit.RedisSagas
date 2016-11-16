@@ -43,6 +43,8 @@ let NuGetVersion = nugetVersion()
 
 printfn "Using version: %s" Version
 printfn "NugetVersion: %s" NuGetVersion
+printfn "AppVeyerNumber: %s" AppVeyorEnvironment.BuildVersion
+ 
 Target "Clean" (fun _ ->
   ensureDirectory buildOutputPath
   ensureDirectory buildArtifactPath
