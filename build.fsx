@@ -42,7 +42,7 @@ let NuGetVersion = nugetVersion()
 
 
 printfn "Using version: %s" Version
-
+printfn "NugetVersion: %s" NuGetVersion
 Target "Clean" (fun _ ->
   ensureDirectory buildOutputPath
   ensureDirectory buildArtifactPath
