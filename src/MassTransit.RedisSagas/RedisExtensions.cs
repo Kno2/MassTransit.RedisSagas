@@ -19,7 +19,7 @@ namespace MassTransit.RedisSagas
         /// </returns>
         public static T Get<T>(this IDatabase db, string key)
         {
-            var valueBytes = db.StringGet(key);
+            var valueBytes = db.StringGet($"Sagas:{key}");
             return !valueBytes.HasValue ? default(T) : JsonConvert.DeserializeObject<T>(valueBytes);
         }
 
@@ -34,7 +34,7 @@ namespace MassTransit.RedisSagas
         /// </returns>
         public static T Get<T>(this IDatabase db, Guid key)
         {
-            var valueBytes = db.StringGet(key.ToString());
+            var valueBytes = db.StringGet($"Sagas:{key}");
             return !valueBytes.HasValue ? default(T) : JsonConvert.DeserializeObject<T>(valueBytes);
         }
 
@@ -50,7 +50,7 @@ namespace MassTransit.RedisSagas
         /// </returns>
         public static async Task<T> GetAsync<T>(this IDatabase database, string key)
         {
-            var valueBytes = await database.StringGetAsync(key);
+            var valueBytes = await database.StringGetAsync($"Sagas:{key}");
 
             if (!valueBytes.HasValue)
             {
@@ -75,7 +75,7 @@ namespace MassTransit.RedisSagas
         {
             var entryBytes = JsonConvert.SerializeObject(value);
 
-            return database.StringSet(key, entryBytes);
+            return database.StringSet($"Sagas:{key}", entryBytes);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace MassTransit.RedisSagas
         {
             var entryBytes = JsonConvert.SerializeObject(value);
 
-            return database.StringSet(value.CorrelationId.ToString(), entryBytes);
+            return database.StringSet($"Sagas:{value.CorrelationId}", entryBytes);
         }
 
     }

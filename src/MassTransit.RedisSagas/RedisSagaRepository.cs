@@ -108,7 +108,7 @@ namespace MassTransit.RedisSagas
             return saga;
         }
 
-        private void PreInsertSagaInstance<T>(IDatabase db, ConsumeContext<T> context, TSaga instance) where T : class
+        private static void PreInsertSagaInstance<T>(IDatabase db, ConsumeContext<T> context, TSaga instance) where T : class
         {
             try
             {
