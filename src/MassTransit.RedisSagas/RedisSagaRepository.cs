@@ -12,10 +12,25 @@ namespace MassTransit.RedisSagas
     {
         private readonly IConnectionMultiplexer _redis;
         static readonly ILog _log = Logger.Get<RedisSagaRepository<TSaga>>();
+        private string _redisPrefix;
 
+        /// <summary>
+        /// Creates new instance of <see cref="RedisSagaRepository{TSaga}"/>
+        /// </summary>
+        /// <param name="redis"><see cref="IConnectionMultiplexer"/> from StackExchange.Redis</param>
         public RedisSagaRepository(IConnectionMultiplexer redis)
         {
             _redis = redis;
+        }
+
+        /// <summary>
+        /// Creates new instance of <see cref="RedisSagaRepository{TSaga}"/>
+        /// </summary>
+        /// <param name="redis"><see cref="IConnectionMultiplexer"/> from StackExchange.Redis</param>
+        /// <param name="redisPrefix">optional string prepeneded to redis as namespace</param>
+        public RedisSagaRepository(IConnectionMultiplexer redis, string redisPrefix) : this(redis)
+        {
+            _redisPrefix = redisPrefix;
         }
 
         public void Probe(ProbeContext context)

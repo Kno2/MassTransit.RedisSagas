@@ -80,6 +80,7 @@
     <Compile Include="ExtensionMethodsForSagas.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SagaPersistenceTestsWithPrefix.cs" />
     <Compile Include="SagaPersistenceTests.cs" />
     <Compile Include="SimpleSaga.cs" />
     <Compile Include="TestSaga.cs" />

@@ -29,12 +29,15 @@ namespace MassTransit.RedisSagas
         /// <typeparam name="T">The type of the expected object</typeparam>
         /// <param name="db"></param>
         /// <param name="key">The cache key.</param>
+        /// <param name="prefix">Prefix for the cache key</param>
         /// <returns>
         ///     Null if not present, otherwise the instance of T.
         /// </returns>
-        public static T Get<T>(this IDatabase db, Guid key)
+        public static T Get<T>(this IDatabase db, Guid key, string prefix = "")
         {
-            var valueBytes = db.StringGet($"Sagas:{key}");
+            var cacheKey = string.IsNullOrEmpty(prefix) ? key.ToString() : $"{prefix}:{key}";
+
+            var valueBytes = db.StringGet(cacheKey);
             return !valueBytes.HasValue ? default(T) : JsonConvert.DeserializeObject<T>(valueBytes);
         }
 
@@ -45,12 +48,14 @@ namespace MassTransit.RedisSagas
         /// <typeparam name="T">The type of the expected object</typeparam>
         /// <param name="database"></param>
         /// <param name="key">The cache key.</param>
+        /// <param name="prefix">Prefix for the cache key</param>
         /// <returns>
         ///     Null if not present, otherwise the instance of T.
         /// </returns>
-        public static async Task<T> GetAsync<T>(this IDatabase database, string key)
+        public static async Task<T> GetAsync<T>(this IDatabase database, string key, string prefix = "")
         {
-            var valueBytes = await database.StringGetAsync($"Sagas:{key}");
+            var cacheKey = string.IsNullOrEmpty(prefix) ? key : $"{prefix}:{key}";
+            var valueBytes = await database.StringGetAsync(cacheKey);
 
             if (!valueBytes.HasValue)
             {
@@ -68,14 +73,16 @@ namespace MassTransit.RedisSagas
         /// <param name="database"></param>
         /// <param name="key">The cache key.</param>
         /// <param name="value">The instance of T.</param>
+        /// <param name="prefix">Prefix for the cache key</param>
         /// <returns>
         ///     True if the object has been added. Otherwise false
         /// </returns>
-        public static bool Add<T>(this IDatabase database, string key, T value)
+        public static bool Add<T>(this IDatabase database, string key, T value, string prefix = "")
         {
+            var cacheKey = string.IsNullOrEmpty(prefix) ? key.ToString() : $"{prefix}:{key}";
             var entryBytes = JsonConvert.SerializeObject(value);
 
-            return database.StringSet($"Sagas:{key}", entryBytes);
+            return database.StringSet(cacheKey, entryBytes);
         }
 
         /// <summary>
@@ -84,14 +91,16 @@ namespace MassTransit.RedisSagas
         /// <typeparam name="T">The type of the class to add to Redis</typeparam>
         /// <param name="database"></param>
         /// <param name="value">The instance of T.</param>
+        /// <param name="prefix">Prefix for the cache key</param>
         /// <returns>
         ///     True if the object has been added. Otherwise false
         /// </returns>
-        public static bool Add<T>(this IDatabase database, ISaga value)
+        public static bool Add<T>(this IDatabase database, ISaga value, string prefix = "")
         {
+            var cacheKey = string.IsNullOrEmpty(prefix) ? value.CorrelationId.ToString() : $"{prefix}:{value.CorrelationId}";
             var entryBytes = JsonConvert.SerializeObject(value);
 
-            return database.StringSet($"Sagas:{value.CorrelationId}", entryBytes);
+            return database.StringSet(cacheKey, entryBytes);
         }
 
     }
