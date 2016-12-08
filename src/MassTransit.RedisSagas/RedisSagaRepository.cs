@@ -59,12 +59,12 @@ namespace MassTransit.RedisSagas
 
             if (instance == null)
             {
-                instance = redis.Get<TSaga>(sagaId);
+                instance = redis.Get<TSaga>(sagaId, _redisPrefix);
             }
 
             if (instance == null)
             {
-                var missingSagaPipe = new MissingPipe<TSaga, T>(_redis, next);
+                var missingSagaPipe = new MissingPipe<TSaga, T>(_redis, next, _redisPrefix);
 
                 await policy.Missing(context, missingSagaPipe).ConfigureAwait(false);
             }
@@ -104,11 +104,11 @@ namespace MassTransit.RedisSagas
             var db = _redis.GetDatabase();
 
             instance.Version++;
-            var old = db.Get<TSaga>(instance.CorrelationId);
+            var old = db.Get<TSaga>(instance.CorrelationId, _redisPrefix);
             if (old.Version > instance.Version)
                 throw new RedisSagaConcurrencyException($"Version conflict for saga with id {instance.CorrelationId}");
 
-            db.Add<TSaga>(instance);
+            db.Add<TSaga>(instance, _redisPrefix);
         }
 
 
@@ -119,15 +119,15 @@ namespace MassTransit.RedisSagas
 
         public TSaga GetSaga(Guid correlationId)
         {
-            var saga = _redis.GetDatabase().Get<TSaga>(correlationId);
+            var saga = _redis.GetDatabase().Get<TSaga>(correlationId, _redisPrefix);
             return saga;
         }
 
-        private static void PreInsertSagaInstance<T>(IDatabase db, ConsumeContext<T> context, TSaga instance) where T : class
+        private void PreInsertSagaInstance<T>(IDatabase db, ConsumeContext<T> context, TSaga instance) where T : class
         {
             try
             {
-                db.Add(context.CorrelationId.ToString(), instance);
+                db.Add(context.CorrelationId.ToString(), instance, _redisPrefix);
 
                 _log.DebugFormat("SAGA:{0}:{1} Insert {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId, TypeMetadataCache<T>.ShortName);
             }
@@ -147,11 +147,13 @@ namespace MassTransit.RedisSagas
             static readonly ILog _log = Logger.Get<RedisSagaRepository<TSaga>>();
             private readonly IConnectionMultiplexer _redis;
             readonly IPipe<SagaConsumeContext<TSaga, TMessage>> _next;
+            private readonly string _redisPrefix;
 
-            public MissingPipe(IConnectionMultiplexer redis, IPipe<SagaConsumeContext<TSaga, TMessage>> next)
+            public MissingPipe(IConnectionMultiplexer redis, IPipe<SagaConsumeContext<TSaga, TMessage>> next, string redisPrefix = "")
             {
                 _redis = redis;
                 _next = next;
+                _redisPrefix = redisPrefix;
             }
 
             public void Probe(ProbeContext context)
@@ -170,7 +172,7 @@ namespace MassTransit.RedisSagas
                 await _next.Send(proxy).ConfigureAwait(false);
 
                 if (!proxy.IsCompleted)
-                    _redis.GetDatabase().Add<TSaga>(context.Saga);
+                    _redis.GetDatabase().Add<TSaga>(context.Saga, _redisPrefix);
             }
         }
     }
