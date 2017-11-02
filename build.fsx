@@ -93,17 +93,18 @@ Target "Build" (fun _ ->
       |> DoNothing
 )
 
-let gitLink = (packagesPath @@ "gitlink" @@ "lib" @@ "net45" @@ "GitLink.exe")
+let gitLink = (packagesPath @@ "gitlink" @@ "build" @@ "GitLink.exe")
 
 Target "GitLink" (fun _ ->
 
     if String.IsNullOrWhiteSpace(gitLink) then failwith "Couldn't find GitLink.exe in the packages folder"
 
+    let pdb = (__SOURCE_DIRECTORY__ @@ "src" @@ "MassTransit.RedisSagas" @@ "bin" @@ "Release" @@ "MassTransit.RedisSagas.pdb")
     let ok =
         execProcess (fun info ->
             info.FileName <- gitLink
-            info.Arguments <- (sprintf "%s -u https://github.com/Royal-Jay/MassTransit.RedisSagas" __SOURCE_DIRECTORY__)) (TimeSpan.FromSeconds 30.0)
-    if not ok then failwith (sprintf "GitLink.exe %s' task failed" __SOURCE_DIRECTORY__)
+            info.Arguments <- (sprintf "%s -u https://github.com/Royal-Jay/MassTransit.RedisSagas" pdb)) (TimeSpan.FromSeconds 30.0)
+    if not ok then failwith (sprintf "GitLink.exe %s' task failed" pdb)
 
 )
 
