@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using RedisInside;
 using StackExchange.Redis;
 using Shouldly;
@@ -66,10 +65,9 @@ namespace MassTransit.RedisSagas.Tests
             _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager, "MySagaPrefix"));
         }
 
-        protected override void ConfigureInputQueueEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
+        protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
         {
             configurator.Saga(_sagaRepository.Value);
         }
     }
-
 }
