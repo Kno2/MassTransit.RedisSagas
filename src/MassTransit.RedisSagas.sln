@@ -26,9 +26,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Abstractions.StrongName", "MassTransit.RedisSagas.Abstractions.StrongName\MassTransit.RedisSagas.Abstractions.StrongName.csproj", "{FE7E472E-4B37-407C-8ADB-E181725E9230}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RedLock", "RedLock", "{8E0AD4DC-7019-48B3-B662-5D1CC9BD5237}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MassTransit.RedisSagas.Redlock.Shared", "MassTransit.RedisSagas.Redlock.Shared\MassTransit.RedisSagas.Redlock.Shared.shproj", "{33D4839F-0539-4721-99E4-CB9C19E8B37A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.RedLock", "MassTransit.RedisSagas.RedLock\MassTransit.RedisSagas.RedLock.csproj", "{F8B53DD6-F3A5-48F7-AAA6-DE6F80E59772}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MassTransit.RedisSagas.Abstractions.Shared\MassTransit.RedisSagas.Abstractions.Shared.projitems*{050bb56c-db84-4988-b13e-73b07831793c}*SharedItemsImports = 13
+		MassTransit.RedisSagas.Redlock.Shared\MassTransit.RedisSagas.Redlock.Shared.projitems*{33d4839f-0539-4721-99e4-cb9c19e8b37a}*SharedItemsImports = 13
 		MassTransit.RedisSagas.Shared\MassTransit.RedisSagas.Shared.projitems*{f3e1e42b-c691-40cc-a9cd-f27b9c55e52c}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +63,10 @@ Global
 		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B53DD6-F3A5-48F7-AAA6-DE6F80E59772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B53DD6-F3A5-48F7-AAA6-DE6F80E59772}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B53DD6-F3A5-48F7-AAA6-DE6F80E59772}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B53DD6-F3A5-48F7-AAA6-DE6F80E59772}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +78,8 @@ Global
 		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
 		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
 		{FE7E472E-4B37-407C-8ADB-E181725E9230} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
+		{33D4839F-0539-4721-99E4-CB9C19E8B37A} = {8E0AD4DC-7019-48B3-B662-5D1CC9BD5237}
+		{F8B53DD6-F3A5-48F7-AAA6-DE6F80E59772} = {8E0AD4DC-7019-48B3-B662-5D1CC9BD5237}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4518F7A3-B231-4F01-ACFC-0B9E7B634217}

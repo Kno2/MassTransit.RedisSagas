@@ -4,7 +4,7 @@ using MassTransit.Context;
 using MassTransit.Logging;
 using MassTransit.Util;
 using RedLock;
-using StackExchange.Redis;
+using MassTransit.RedisSagas.Abstractions;
 using TaskUtil = GreenPipes.Util.TaskUtil;
 
 namespace MassTransit.RedisSagas.RedLock
@@ -17,14 +17,12 @@ namespace MassTransit.RedisSagas.RedLock
     {
 
         private static readonly ILog Log = Logger.Get<DistributedRedisSagaRepository<TSaga>>();
-        private readonly IConnectionMultiplexer _redis;
+        private readonly RedLockFactory _redLockFactory;
 
-        public DistributedRedisSagaConsumeContext(IConnectionMultiplexer redis, ConsumeContext<TMessage> context, TSaga saga) : base(context)
+        public DistributedRedisSagaConsumeContext(RedLockFactory redLockFactory, ConsumeContext<TMessage> context, TSaga saga) : base(context)
         {
-            _redis = redis;
             Saga = saga;
-
-            
+            _redlockFactory = redLockFactory;
         }
 
         Guid? MessageContext.CorrelationId => Saga.CorrelationId;
@@ -39,6 +37,17 @@ namespace MassTransit.RedisSagas.RedLock
 
         public Task SetCompleted()
         {
+            var expiry = TimeSpan.FromSeconds(30);
+            var wait = TimeSpan.FromSeconds(10);
+            var retry = TimeSpan.FromSeconds(1);
+            using (var redLock = await redlockFactory.CreateLockAsync(Saga.CorrelationId.ToString(), expiry, wait, retry))
+            {
+                if (redLock.IsAcquired)
+                {
+                    
+                }
+            }
+
             var client = _redis.GetDatabase();
 
             client.KeyDelete(Saga.CorrelationId.ToString());

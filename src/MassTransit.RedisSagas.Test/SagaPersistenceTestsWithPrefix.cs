@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MassTransit.RedisSagas.Abstractions.Shared;
+using MassTransit.RedisSagas.Abstractions;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
 using NUnit.Framework;
