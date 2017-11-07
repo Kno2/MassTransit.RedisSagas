@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\build.fsx = ..\build.fsx
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Abstractions.StrongName", "MassTransit.RedisSagas.Abstractions.StrongName\MassTransit.RedisSagas.Abstractions.StrongName.csproj", "{FE7E472E-4B37-407C-8ADB-E181725E9230}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MassTransit.RedisSagas.Abstractions.Shared\MassTransit.RedisSagas.Abstractions.Shared.projitems*{050bb56c-db84-4988-b13e-73b07831793c}*SharedItemsImports = 13
@@ -50,6 +52,10 @@ Global
 		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{F3E1E42B-C691-40CC-A9CD-F27B9C55E52C} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
 		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
 		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
+		{FE7E472E-4B37-407C-8ADB-E181725E9230} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4518F7A3-B231-4F01-ACFC-0B9E7B634217}

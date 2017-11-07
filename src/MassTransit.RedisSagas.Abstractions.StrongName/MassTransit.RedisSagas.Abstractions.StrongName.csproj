@@ -15,9 +15,13 @@
     <PackageProjectUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>MassTransit Redis Strongname</PackageTags>
+    <PackageTags>MassTransit Redis</PackageTags>
     <PackageReleaseNotes>0.2.0-pre2 - .NET Core release</PackageReleaseNotes>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <AssemblyName>MassTransit.RedisSagas.Abstractions.StrongName</AssemblyName>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\MassTransit.RedisSagas.snk</AssemblyOriginatorKeyFile>
+    <DefineConstants>STRONG_NAME</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">

@@ -16,14 +16,14 @@
 		<tags>MassTransit Redis Sagas</tags>
 		<dependencies>
 			<group targetFramework=".NETFramework4.6">
-				<dependency id="StackExchange.Redis" version="1.2.6" exclude="Build,Analyzers" />
+				<dependency id="StackExchange.Redis.StrongName" version="1.2.6" exclude="Build,Analyzers" />
 				<dependency id="MassTransit" version="3.5.7" />
 			</group>
 			
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="src\MassTransit.RedisSagas\bin\Release\net46\MassTransit.RedisSagas.dll" target="lib\net46" />
-		<file src="src\MassTransit.RedisSagas.Abstractions\bin\Release\net46\MassTransit.RedisSagas.Abstractions.dll" target="lib\net46" />
+		<file src="src\MassTransit.RedisSagas.StrongName\bin\Release\net46\MassTransit.RedisSagas.StrongName.dll" target="lib\net46" />
+		<file src="src\MassTransit.RedisSagas.Abstractions.StrongName\bin\Release\net46\MassTransit.RedisSagas.Abstractions.StrongName.dll" target="lib\net46" />
 	</files>
 </package>
