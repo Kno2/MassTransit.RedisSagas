@@ -1,15 +1,22 @@
-version: 1.0.{build}
-skip_tags: true
+version: 1.0.0.{build}
 image: Visual Studio 2017
 configuration: Release
 cache: packages -> **\packages.config
-before_build:
-- cmd: nuget restore
 build:
+  project: src/MassTransit.RedisSagas.sln
   verbosity: normal
 after_build:
-- cmd: >-
-    nuget pack MassTransit.RedisSagas.nuspec
-    
+- cmd: nuget pack MassTransit.RedisSagas.nuspec
+test:
+  assemblies:
+    only:
+    - '**\*RedisSagas.Test.dll'
 artifacts:
 - path: '*.nupkg'
+deploy:
+- provider: NuGet
+  api_key:
+    secure: SMGJALohgGcrJt9wAoRAzL9hfgLpulP7+vw0xY+TlFjEkScJbTfB0Ff9Y0FARDNL
+  skip_symbols: false
+  on:
+    branch: master
