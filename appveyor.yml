@@ -8,7 +8,7 @@ build:
   project: src/MassTransit.RedisSagas.sln
   verbosity: normal
 after_build:
-- cmd: nuget pack MassTransit.RedisSagas.nuspec
+- cmd: nuget pack MassTransit.RedisSagas.nuspec -Version %APPVEYOR_BUILD_VERSION%
 test:
   assemblies:
     only:
