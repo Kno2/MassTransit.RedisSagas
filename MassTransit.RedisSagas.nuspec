@@ -3,7 +3,7 @@
 	<metadata>
 		<id>MassTransit.RedisSagas</id>
 		<version>1.0.0</version>
-		<title>RedLock.net</title>
+		<title>MassTransit.RedisSagas</title>
 		<authors>Royal Jay</authors>
 		<owners>Royal Jay</owners>
 	 <licenseUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas/blob/master/LICENSE</licenseUrl>
@@ -17,7 +17,7 @@
 		<dependencies>
 			<group targetFramework=".NETFramework4.6">
 				<dependency id="StackExchange.Redis" version="1.2.6" exclude="Build,Analyzers" />
-				<dependency id="MassTransit" version="3.5.7" />
+				<dependency id="MassTransit" version="3.5.7" exclude="Build,Analyzers" />
 			</group>
 			
 		</dependencies>
