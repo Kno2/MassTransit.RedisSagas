@@ -13,43 +13,39 @@ namespace MassTransit.RedisSagas
         where TMessage : class
         where TSaga : class, IVersionedSaga
     {
+        static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
+        readonly IDatabase _redisDb;
 
-        private static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
-        private readonly IConnectionMultiplexer _redis;
-
-        public RedisSagaConsumeContext(IConnectionMultiplexer redis, ConsumeContext<TMessage> context, TSaga saga) : base(context)
+        public RedisSagaConsumeContext(IDatabase redisDb, ConsumeContext<TMessage> context, TSaga instance)
+            : base(context)
         {
-            _redis = redis;
-            Saga = saga;
+            Saga = instance;
+            _redisDb = redisDb;
         }
 
         Guid? MessageContext.CorrelationId => Saga.CorrelationId;
 
-        public SagaConsumeContext<TSaga, T> PopContext<T>() where T : class
+        SagaConsumeContext<TSaga, T> SagaConsumeContext<TSaga>.PopContext<T>()
         {
             var context = this as SagaConsumeContext<TSaga, T>;
-            if(context == null)
+            if (context == null)
                 throw new ContextException($"The ConsumeContext<{TypeMetadataCache<TMessage>.ShortName}> could not be cast to {TypeMetadataCache<T>.ShortName}");
 
             return context;
         }
 
-        public Task SetCompleted()
+        async Task SagaConsumeContext<TSaga>.SetCompleted()
         {
-            var client = _redis.GetDatabase();
-
-            client.KeyDelete(Saga.CorrelationId.ToString());
+            ITypedDatabase<TSaga> db = _redisDb.As<TSaga>();
+            await db.Delete(Saga.CorrelationId).ConfigureAwait(false);
 
             IsCompleted = true;
-
             if (Log.IsDebugEnabled)
                 Log.DebugFormat("SAGA:{0}:{1} Removed {2}", TypeMetadataCache<TSaga>.ShortName, TypeMetadataCache<TMessage>.ShortName,
                     Saga.CorrelationId);
-
-            return TaskUtil.Completed;
         }
 
         public TSaga Saga { get; }
-        public bool IsCompleted { get; set; }
+        public bool IsCompleted { get; private set; }
     }
 }

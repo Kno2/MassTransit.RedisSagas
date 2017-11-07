@@ -26,7 +26,7 @@ namespace MassTransit.RedisSagas.Test
 
             await InputQueueSendEndpoint.Send(message).ConfigureAwait(false);
 
-            var found = _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
+            var found = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             found.ShouldBeTrue();
 
@@ -37,20 +37,20 @@ namespace MassTransit.RedisSagas.Test
             found = await _sagaRepository.Value.ShouldContainSaga(sagaId, x => x.Completed, TestTimeout).ConfigureAwait(false);
             found.ShouldBeTrue();
             var retrieveRepository = _sagaRepository.Value as IRetrieveSagaFromRepository<SimpleSaga>;
-            var retrieved = retrieveRepository.GetSaga(sagaId);
+            var retrieved = await retrieveRepository.GetSaga(sagaId);
             retrieved.ShouldNotBeNull();
             retrieved.Completed.ShouldBeTrue();
         }
 
         [Test]
-        public void An_initiating_message_should_start_the_saga()
+        public async Task An_initiating_message_should_start_the_saga()
         {
             Guid sagaId = NewId.NextGuid();
             var message = new InitiateSimpleSaga(sagaId);
 
             InputQueueSendEndpoint.Send(message);
 
-            var found = _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
+            var found = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             found.ShouldBeTrue();
         }
@@ -62,7 +62,7 @@ namespace MassTransit.RedisSagas.Test
             {
                 EndPoints = { _redis.Endpoint}
             });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager, "MySagaPrefix"));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(() => clientManager.GetDatabase(), "MySagaPrefix"));
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)

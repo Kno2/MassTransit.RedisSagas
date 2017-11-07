@@ -7,7 +7,6 @@ namespace MassTransit.RedisSagas.Test
     public class SimpleSaga :
     InitiatedBy<InitiateSimpleSaga>,
     Orchestrates<CompleteSimpleSaga>,
-    //Observes<ObservableSagaMessage, SimpleSaga>,
     ISaga, IVersionedSaga
     {
         public bool Completed { get; set; }
