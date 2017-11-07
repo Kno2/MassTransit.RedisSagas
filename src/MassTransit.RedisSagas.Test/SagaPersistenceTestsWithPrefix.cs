@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MassTransit.RedisSagas.Abstractions.Shared;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
 using NUnit.Framework;
@@ -10,7 +11,7 @@ using Shouldly;
 namespace MassTransit.RedisSagas.Tests
 {
     [TestFixture]
-    public class LocateAnExistingSaga : InMemoryTestFixture
+    public class LocateAnExistingSaga_WithPrefix : InMemoryTestFixture
     {
         private Redis _redis;
         [OneTimeTearDown]
@@ -55,14 +56,14 @@ namespace MassTransit.RedisSagas.Tests
             found.ShouldBeTrue();
         }
 
-        public LocateAnExistingSaga()
+        public LocateAnExistingSaga_WithPrefix()
         {
             _redis = new Redis();
             var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
             {
                 EndPoints = { _redis.Endpoint}
             });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager, "MySagaPrefix"));
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)

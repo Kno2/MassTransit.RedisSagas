@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MassTransit.RedisSagas.Abstractions.Shared;
 using MassTransit.Saga;
 
 namespace MassTransit.RedisSagas.Tests
