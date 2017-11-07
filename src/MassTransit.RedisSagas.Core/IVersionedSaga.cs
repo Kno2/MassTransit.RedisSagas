@@ -1,6 +1,6 @@
 ﻿using MassTransit.Saga;
 
-namespace MassTransit.RedisSagas
+namespace MassTransit.RedisSaga
 {
     public interface IVersionedSaga : ISaga
     {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MassTransit.RedisSaga;
 using MassTransit.Saga;
+using MassTransit.RedisSagas;
 
 namespace MassTransit.RedisSagas.Test
 {
