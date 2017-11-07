@@ -8,7 +8,7 @@ using RedisInside;
 using StackExchange.Redis;
 using Shouldly;
 
-namespace MassTransit.RedisSagas.Tests
+namespace MassTransit.RedisSagas.Test
 {
     [TestFixture]
     public class LocateAnExistingSaga_WithPrefix : InMemoryTestFixture
