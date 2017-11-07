@@ -8,8 +8,4 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>MassTransit.RedisSagas.Abstractions.Shared</Import_RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)IRetreiveSagaFromRepository.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IVersionedSagacs.cs" />
-  </ItemGroup>
 </Project>

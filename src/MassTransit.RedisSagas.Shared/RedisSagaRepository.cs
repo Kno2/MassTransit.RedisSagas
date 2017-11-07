@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using GreenPipes;
 using MassTransit.Logging;
-using MassTransit.RedisSagas.Abstractions;
 using MassTransit.Saga;
 using MassTransit.Util;
 using StackExchange.Redis;

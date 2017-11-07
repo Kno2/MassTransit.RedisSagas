@@ -11,5 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)DistributedRedisSagaConsumeContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DistributedRedisSagaRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRetreiveSagaFromRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IVersionedSagacs.cs" />
   </ItemGroup>
 </Project>

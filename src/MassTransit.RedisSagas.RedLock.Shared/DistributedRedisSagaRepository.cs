@@ -5,7 +5,6 @@ using MassTransit.Logging;
 using MassTransit.Saga;
 using MassTransit.Util;
 using StackExchange.Redis;
-using MassTransit.RedisSagas.Abstractions;
 
 namespace MassTransit.RedisSagas.RedLock
 {

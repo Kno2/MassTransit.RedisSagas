@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MassTransit.RedisSagas.Abstractions\MassTransit.RedisSagas.Abstractions.csproj" />
     <ProjectReference Include="..\MassTransit.RedisSagas\MassTransit.RedisSagas.csproj" />
   </ItemGroup>
   

@@ -9,6 +9,8 @@
     <Import_RootNamespace>MassTransit.RedisSagas.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)IRetreiveSagaFromRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IVersionedSagacs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RedisExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RedisSagaConcurrencyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RedisSagaConsumeContext.cs" />
