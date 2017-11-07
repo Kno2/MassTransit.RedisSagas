@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>MassTransit.RedisSagas</id>
-		
+		<version>1.0.0</version>
 		<title>RedLock.net</title>
 		<authors>Royal Jay</authors>
 		<owners>Royal Jay</owners>
