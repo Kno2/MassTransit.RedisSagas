@@ -1,0 +1,15 @@
+version: 1.0.{build}
+skip_tags: true
+image: Visual Studio 2017
+configuration: Release
+cache: packages -> **\packages.config
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: normal
+after_build:
+- cmd: >-
+    nuget pack MassTransit.RedisSagas.nuspec
+    
+artifacts:
+- path: '*.nupkg'
