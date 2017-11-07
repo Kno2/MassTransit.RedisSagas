@@ -2,6 +2,8 @@ version: 1.0.0.{build}
 image: Visual Studio 2017
 configuration: Release
 cache: packages -> **\packages.config
+before_build:
+- cmd: nuget restore
 build:
   project: src/MassTransit.RedisSagas.sln
   verbosity: normal
