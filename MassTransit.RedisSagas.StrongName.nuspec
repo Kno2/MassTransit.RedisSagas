@@ -7,7 +7,7 @@
 		<authors>Royal Jay</authors>
 		<owners>Royal Jay</owners>
 	 <licenseUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas/blob/master/LICENSE</licenseUrl>
-    <projectUrl>hhttps://github.com/Royal-Jay/MassTransit.RedisSagas</projectUrl>
+    <projectUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas</projectUrl>
     <iconUrl>http://MassTransit-project.com/wp-content/themes/pandora/slide.1.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>An implementation of MassTransit saga repository on Redis</description>
