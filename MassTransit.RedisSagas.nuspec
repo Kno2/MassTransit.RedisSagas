@@ -2,16 +2,16 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>MassTransit.RedisSagas</id>
-		<version>@build.number@</version>
+		<version>1.0.0</version>
 		<title>RedLock.net</title>
-		<authors>S@authors@</authors>
-		<owners>@authors@</owners>
+		<authors>Royal Jay</authors>
+		<owners>Royal Jay</owners>
 	 <licenseUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas/blob/master/LICENSE</licenseUrl>
     <projectUrl>hhttps://github.com/Royal-Jay/MassTransit.RedisSagas</projectUrl>
     <iconUrl>http://MassTransit-project.com/wp-content/themes/pandora/slide.1.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>@description@</description>
-    <releaseNotes>@releaseNotes@</releaseNotes>
+		<description>An implementation of MassTransit saga repository on Redis</description>
+		<releaseNotes></releaseNotes>
 		<copyright>Copyright 2017 Royal Jay</copyright>
 		<tags>MassTransit Redis Sagas</tags>
 		<dependencies>
