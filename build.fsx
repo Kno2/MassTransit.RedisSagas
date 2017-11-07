@@ -109,7 +109,7 @@ Target "GitLink" (fun _ ->
 )
 
 
-let testDlls = [ "./src/MassTransit.RedisSagas.Tests/bin/Release/MassTransit.RedisSagas.Tests.dll" ]
+let testDlls = [ "./src/MassTransit.RedisSagas.Test/bin/Release/MassTransit.RedisSagas.Test.dll" ]
 
 Target "UnitTests" (fun _ ->
     testDlls
@@ -157,7 +157,7 @@ Target "Package" (fun _ ->
           Files = nug.Files
       } 
 
-      NuGet setParams (FullName "./template.nuspec")
+      NuGet setParams (FullName "./MassTransit.RedisSagas.nuspec")
     )
 )
 

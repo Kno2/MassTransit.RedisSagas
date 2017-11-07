@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+	<metadata>
+		<id>MassTransit.RedisSagas</id>
+		<version>1.0.0</version>
+		<title>MassTransit.RedisSagas</title>
+		<authors>Royal Jay</authors>
+		<owners>Royal Jay</owners>
+	 <licenseUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas/blob/master/LICENSE</licenseUrl>
+    <projectUrl>hhttps://github.com/Royal-Jay/MassTransit.RedisSagas</projectUrl>
+    <iconUrl>http://MassTransit-project.com/wp-content/themes/pandora/slide.1.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>An implementation of MassTransit saga repository on Redis</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright 2017 Royal Jay</copyright>
+		<tags>MassTransit Redis Sagas</tags>
+		<dependencies>
+			<group targetFramework=".NETFramework4.6">
+				<dependency id="StackExchange.Redis" version="1.2.6" exclude="Build,Analyzers" />
+				<dependency id="MassTransit" version="3.5.7" exclude="Build,Analyzers" />
+			</group>
+			
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="src\MassTransit.RedisSagas\bin\Release\net46\MassTransit.RedisSagas.dll" target="lib\net46" />
+		<file src="src\MassTransit.RedisSagas.Abstractions\bin\Release\net46\MassTransit.RedisSagas.Abstractions.dll" target="lib\net46" />
+	</files>
+</package>

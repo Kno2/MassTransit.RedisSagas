@@ -1,28 +1,74 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas", "MassTransit.RedisSagas\MassTransit.RedisSagas.csproj", "{C0B1328A-1016-468D-B171-0DA4377D889C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.StrongName", "MassTransit.RedisSagas.StrongName\MassTransit.RedisSagas.StrongName.csproj", "{0E5F78BF-EE7B-44CD-8262-7C5EE4AB0D7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Tests", "MassTransit.RedisSagas.Tests\MassTransit.RedisSagas.Tests.csproj", "{2A66B253-874A-4C70-9A51-1246B6FE7614}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MassTransit.RedisSagas.Abstractions.Shared", "MassTransit.RedisSagas.Abstractions.Shared\MassTransit.RedisSagas.Abstractions.Shared.shproj", "{050BB56C-DB84-4988-B13E-73B07831793C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MassTransit.RedisSagas.Shared", "MassTransit.RedisSagas.Shared\MassTransit.RedisSagas.Shared.shproj", "{F3E1E42B-C691-40CC-A9CD-F27B9C55E52C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas", "MassTransit.RedisSagas\MassTransit.RedisSagas.csproj", "{96AD95CB-68D9-47C3-A05D-6F55CF0FB138}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Abstractions", "MassTransit.RedisSagas.Abstractions\MassTransit.RedisSagas.Abstractions.csproj", "{B1D5683D-E889-45B8-9CB0-ED36A1E34A95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RedisSagas", "RedisSagas", "{BE8C8157-29B1-42E1-8813-08261F5CDBF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Test", "MassTransit.RedisSagas.Test\MassTransit.RedisSagas.Test.csproj", "{270E8FAA-C6B0-4D52-800C-416CEB81ED30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A7042F9-F926-4544-9F28-11156011B350}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.fsx = ..\build.fsx
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Abstractions.StrongName", "MassTransit.RedisSagas.Abstractions.StrongName\MassTransit.RedisSagas.Abstractions.StrongName.csproj", "{FE7E472E-4B37-407C-8ADB-E181725E9230}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MassTransit.RedisSagas.Abstractions.Shared\MassTransit.RedisSagas.Abstractions.Shared.projitems*{050bb56c-db84-4988-b13e-73b07831793c}*SharedItemsImports = 13
+		MassTransit.RedisSagas.Shared\MassTransit.RedisSagas.Shared.projitems*{f3e1e42b-c691-40cc-a9cd-f27b9c55e52c}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C0B1328A-1016-468D-B171-0DA4377D889C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0B1328A-1016-468D-B171-0DA4377D889C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0B1328A-1016-468D-B171-0DA4377D889C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0B1328A-1016-468D-B171-0DA4377D889C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A66B253-874A-4C70-9A51-1246B6FE7614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A66B253-874A-4C70-9A51-1246B6FE7614}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A66B253-874A-4C70-9A51-1246B6FE7614}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A66B253-874A-4C70-9A51-1246B6FE7614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E5F78BF-EE7B-44CD-8262-7C5EE4AB0D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E5F78BF-EE7B-44CD-8262-7C5EE4AB0D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E5F78BF-EE7B-44CD-8262-7C5EE4AB0D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E5F78BF-EE7B-44CD-8262-7C5EE4AB0D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{270E8FAA-C6B0-4D52-800C-416CEB81ED30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE7E472E-4B37-407C-8ADB-E181725E9230}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0E5F78BF-EE7B-44CD-8262-7C5EE4AB0D7F} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
+		{050BB56C-DB84-4988-B13E-73B07831793C} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
+		{F3E1E42B-C691-40CC-A9CD-F27B9C55E52C} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
+		{96AD95CB-68D9-47C3-A05D-6F55CF0FB138} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
+		{B1D5683D-E889-45B8-9CB0-ED36A1E34A95} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
+		{FE7E472E-4B37-407C-8ADB-E181725E9230} = {EECB1958-9F9F-49DE-95AC-EECD5A85EC2F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4518F7A3-B231-4F01-ACFC-0B9E7B634217}
 	EndGlobalSection
 EndGlobal

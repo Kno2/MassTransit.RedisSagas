@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MassTransit.RedisSagas.Tests
+namespace MassTransit.RedisSagas.Test
 {
     public class SimpleSagaMessageBase : CorrelatedBy<Guid>
     {

@@ -3,32 +3,35 @@ using System.Threading.Tasks;
 using MassTransit.Context;
 using MassTransit.Logging;
 using MassTransit.Util;
+using RedLock;
 using StackExchange.Redis;
+using TaskUtil = GreenPipes.Util.TaskUtil;
 
-namespace MassTransit.RedisSagas
+namespace MassTransit.RedisSagas.RedLock
 {
-    public class RedisSagaConsumeContext<TSaga, TMessage> :
+    public class DistributedRedisSagaConsumeContext<TSaga, TMessage> :
         ConsumeContextProxyScope<TMessage>,
         SagaConsumeContext<TSaga, TMessage>
         where TMessage : class
         where TSaga : class, IVersionedSaga
     {
 
-        private static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
+        private static readonly ILog Log = Logger.Get<DistributedRedisSagaRepository<TSaga>>();
         private readonly IConnectionMultiplexer _redis;
 
-        public RedisSagaConsumeContext(IConnectionMultiplexer redis, ConsumeContext<TMessage> context, TSaga saga) : base(context)
+        public DistributedRedisSagaConsumeContext(IConnectionMultiplexer redis, ConsumeContext<TMessage> context, TSaga saga) : base(context)
         {
             _redis = redis;
             Saga = saga;
+
+            
         }
 
         Guid? MessageContext.CorrelationId => Saga.CorrelationId;
 
         public SagaConsumeContext<TSaga, T> PopContext<T>() where T : class
         {
-            var context = this as SagaConsumeContext<TSaga, T>;
-            if(context == null)
+            if (!(this is SagaConsumeContext<TSaga, T> context))
                 throw new ContextException($"The ConsumeContext<{TypeMetadataCache<TMessage>.ShortName}> could not be cast to {TypeMetadataCache<T>.ShortName}");
 
             return context;
