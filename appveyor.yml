@@ -4,7 +4,7 @@ configuration: Release
 cache: packages -> **\packages.config
 before_build:
 - cmd: nuget restore src/MassTransit.RedisSagas.sln
-build:
+build_script:
 - cmd: build.bat
 test:
   assemblies:
