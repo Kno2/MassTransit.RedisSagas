@@ -12,7 +12,7 @@ let nugetWorkingPath = FullName "./build_temp"
 let packagesPath = FullName "./src/packages"
 
 
-let assemblyVersion = "1.0.0.0"
+let assemblyVersion = "1.0.0"
 let baseVersion = "1.0.0"
 
 let semVersion : SemVerInfo = parse baseVersion
@@ -109,7 +109,7 @@ Target "GitLink" (fun _ ->
 )
 
 
-let testDlls = [ "./src/MassTransit.RedisSagas.Test/bin/Release/MassTransit.RedisSagas.Test.dll" ]
+let testDlls = [ "./src/MassTransit.RedisSagas.Tests/bin/Release/MassTransit.RedisSagas.Tests.dll" ]
 
 Target "UnitTests" (fun _ ->
     testDlls
@@ -132,8 +132,13 @@ Target "Package" (fun _ ->
   let nugs = [| { Project = "MassTransit.RedisSagas"
                   Summary = "MassTransit RedisSagas, a persistence store for MassTransit using Redis"
                   PackageFile = @".\src\MassTransit.RedisSagas\packages.config"
-                  Files = [ (@"..\src\MassTransit.RedisSagas\bin\Release\MassTransit.RedisSagas.*", Some @"lib\net452", None);
+                  Files = [ (@"..\src\MassTransit.RedisSagas\bin\Release\MassTransit.RedisSagas.*", Some @"lib\net46", None);
                             (@"..\src\MassTransit.RedisSagas\**\*.cs", Some "src", None) ] }
+                { Project = "MassTransit.RedisSagas.StrongName"
+                  Summary = "MassTransit RedisSagas (Strong Name), a persistence store for MassTransit using Redis"
+                  PackageFile = @".\src\MassTransit.RedisSagas.StrongName\packages.config"
+                  Files = [ (@"..\src\MassTransit.RedisSagas.StrongName\bin\Release\MassTransit.RedisSagas.*", Some @"lib\net46", None);
+                            (@"..\src\MassTransit.RedisSagas.StrongName\**\*.cs", Some "src", None) ] }
              |]
 
   nugs
@@ -157,7 +162,7 @@ Target "Package" (fun _ ->
           Files = nug.Files
       } 
 
-      NuGet setParams (FullName "./MassTransit.RedisSagas.nuspec")
+      NuGet setParams (FullName "./template.nuspec")
     )
 )
 

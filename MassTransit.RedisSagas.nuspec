@@ -23,7 +23,7 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="src\MassTransit.RedisSagas\bin\Release\net46\MassTransit.RedisSagas.dll" target="lib\net46" />
-		<file src="src\MassTransit.RedisSagas.Abstractions\bin\Release\net46\MassTransit.RedisSagas.Abstractions.dll" target="lib\net46" />
+		<file src="src\MassTransit.RedisSagas\bin\Release\MassTransit.RedisSagas.dll" target="lib\net46" />
+		<file src="src\MassTransit.RedisSagas.Abstractions\bin\Release\MassTransit.Core.dll" target="lib\net46" />
 	</files>
 </package>

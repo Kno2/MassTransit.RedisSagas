@@ -6,8 +6,8 @@
     <authors>@authors@</authors>
     <owners>@authors@</owners>
     <summary>@summary@</summary>
-    <licenseUrl>https://github.com/MassTransit/MassTransit/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/MassTransit/MassTransit</projectUrl>
+	<licenseUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Royal-Jay/MassTransit.RedisSagas</projectUrl>
     <iconUrl>http://MassTransit-project.com/wp-content/themes/pandora/slide.1.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>@description@</description>
