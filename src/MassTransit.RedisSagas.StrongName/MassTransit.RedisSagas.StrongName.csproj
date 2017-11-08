@@ -69,21 +69,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRetreiveSagaFromRepository.cs" />
+    <Compile Include="ISagaSerializer.cs" />
+    <Compile Include="IVersionedSaga.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedisSagaConcurrencyException.cs" />
     <Compile Include="RedisSagaConsumeContext.cs" />
     <Compile Include="RedisSagaRepository.cs" />
+    <Compile Include="SagaSerializer.cs" />
     <Compile Include="TypedDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="MassTransit.RedisSagas.snk" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MassTransit.RedisSagas.Core\MassTransit.RedisSagas.Core.csproj">
-      <Project>{b18fe073-7bc2-4f67-86b4-96bd176897fb}</Project>
-      <Name>MassTransit.RedisSagas.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

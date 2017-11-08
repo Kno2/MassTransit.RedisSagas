@@ -5,30 +5,45 @@ using MassTransit.Logging;
 using MassTransit.RedisSaga;
 using MassTransit.Saga;
 using MassTransit.Util;
+using RedLock;
 using StackExchange.Redis;
 
-namespace MassTransit.RedisSagas
+namespace MassTransit.RedisSagas.RedLock
 {
-    public class RedisSagaRepository<TSaga> : ISagaRepository<TSaga>,
+    public class RedLockSagaRepository<TSaga> : ISagaRepository<TSaga>,
         IRetrieveSagaFromRepository<TSaga>
         where TSaga : class, IVersionedSaga
     {
-        private static readonly ILog _log = Logger.Get<RedisSagaRepository<TSaga>>();
+        private static readonly ILog _log = Logger.Get<RedLockSagaRepository<TSaga>>();
 
         private readonly IConnectionMultiplexer _redisConnection;
+        private readonly IRedisLockFactory _lockFactory;
         private readonly string _redisPrefix;
 
-        public RedisSagaRepository(IConnectionMultiplexer redisConnection, string redisPrefix)
+        public RedLockSagaRepository(IConnectionMultiplexer redisConnection, IRedisLockFactory lockFactory, string redisPrefix)
         {
             _redisConnection = redisConnection;
+            _lockFactory = lockFactory;
             _redisPrefix = redisPrefix;
         }
 
-        public RedisSagaRepository(IConnectionMultiplexer redisConnection) => _redisConnection = redisConnection;
+        public RedLockSagaRepository(IConnectionMultiplexer redisConnection, RedisLockFactory lockFactory)
+        {
+            _redisConnection = redisConnection;
+            _lockFactory = lockFactory;
+        }
 
         public async Task<TSaga> GetSaga(Guid correlationId)
         {
-            return await _redisConnection.GetDatabase().As<TSaga>().Get(correlationId, _redisPrefix);
+            using (var distLock = _lockFactory.Create($"redislock:{correlationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+            {
+                if (distLock.IsAcquired)
+                {
+                    var db = _redisConnection.GetDatabase();
+                    return await db.As<TSaga>().Get(correlationId, _redisPrefix);
+                }
+            }
+            return null;
         }
 
         public async Task Send<T>(ConsumeContext<T> context, ISagaPolicy<TSaga, T> policy,
@@ -46,12 +61,20 @@ namespace MassTransit.RedisSagas
                 await PreInsertSagaInstance<T>(sagas, instance).ConfigureAwait(false);
 
             if (instance == null)
-                instance = await sagas.Get(sagaId, _redisPrefix).ConfigureAwait(false);
+            {
+                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                {
+                    if (distLock.IsAcquired)
+                    {
+                        instance = await sagas.Get(sagaId, _redisPrefix).ConfigureAwait(false);
+                    }
+                }
+            }
 
 
             if (instance == null)
             {
-                var missingSagaPipe = new MissingPipe<T>(db, next, _redisPrefix);
+                var missingSagaPipe = new MissingPipe<T>(db, _lockFactory, next, _redisPrefix);
                 await policy.Missing(context, missingSagaPipe).ConfigureAwait(false);
             }
             else
@@ -86,7 +109,7 @@ namespace MassTransit.RedisSagas
                     _log.DebugFormat("SAGA:{0}:{1} Used {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId, TypeMetadataCache<T>.ShortName);
 
                 var db = _redisConnection.GetDatabase();
-                var sagaConsumeContext = new RedisSagaConsumeContext<TSaga, T>(db, context, instance, _redisPrefix);
+                var sagaConsumeContext = new RedLockSagaConsumeContext<TSaga, T>(db, _lockFactory, context, instance, _redisPrefix);
 
                 await policy.Existing(sagaConsumeContext, next).ConfigureAwait(false);
 
@@ -107,7 +130,15 @@ namespace MassTransit.RedisSagas
         {
             try
             {
-                await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
+                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                {
+                    if (distLock.IsAcquired)
+                    {
+                        // Work inside Lock
+                        await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
+                    }
+                }
+                
 
                 if (_log.IsDebugEnabled)
                     _log.DebugFormat("SAGA:{0}:{1} Insert {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId,
@@ -130,11 +161,17 @@ namespace MassTransit.RedisSagas
             ITypedDatabase<TSaga> sagas = db.As<TSaga>();
 
             instance.Version++;
-            var old = await sagas.Get(instance.CorrelationId, _redisPrefix).ConfigureAwait(false);
-            if (old.Version > instance.Version)
-                throw new RedisSagaConcurrencyException($"Version conflict for saga with id {instance.CorrelationId}");
+            using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+            {
+                if (distLock.IsAcquired)
+                {
+                    var old = await sagas.Get(instance.CorrelationId, _redisPrefix).ConfigureAwait(false);
+                    if (old.Version > instance.Version)
+                        throw new RedisSagaConcurrencyException($"Version conflict for saga with id {instance.CorrelationId}");
 
-            await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
+                    await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
+                }
+            }
         }
 
 
@@ -148,11 +185,13 @@ namespace MassTransit.RedisSagas
         {
             readonly IPipe<SagaConsumeContext<TSaga, TMessage>> _next;
             readonly IDatabase _redisDb;
+            private readonly IRedisLockFactory _lockFactory;
             private readonly string _redisPrefix;
 
-            public MissingPipe(IDatabase redisDb, IPipe<SagaConsumeContext<TSaga, TMessage>> next, string redisPrefix = "")
+            public MissingPipe(IDatabase redisDb, IRedisLockFactory lockFactory, IPipe<SagaConsumeContext<TSaga, TMessage>> next, string redisPrefix = "")
             {
                 _redisDb = redisDb;
+                _lockFactory = lockFactory;
                 _next = next;
                 _redisPrefix = redisPrefix;
             }
@@ -169,13 +208,21 @@ namespace MassTransit.RedisSagas
                         context.Saga.CorrelationId,
                         TypeMetadataCache<TMessage>.ShortName);
 
-                SagaConsumeContext<TSaga, TMessage> proxy = new RedisSagaConsumeContext<TSaga, TMessage>(_redisDb,
-                    context, context.Saga, _redisPrefix);
+                SagaConsumeContext<TSaga, TMessage> proxy = new RedLockSagaConsumeContext<TSaga, TMessage>(_redisDb, _lockFactory, context, context.Saga, _redisPrefix);
 
                 await _next.Send(proxy).ConfigureAwait(false);
 
                 if (!proxy.IsCompleted)
-                    await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
+                {
+                    using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                    {
+                        if (distLock.IsAcquired)
+                        {
+                            // Work inside Lock
+                            await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
+                        }
+                    }
+                }
             }
         }
     }

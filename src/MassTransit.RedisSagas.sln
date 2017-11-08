@@ -16,9 +16,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.StrongName", "MassTransit.RedisSagas.StrongName\MassTransit.RedisSagas.StrongName.csproj", "{CF70706F-36FF-4F67-B0D6-69DF90CC0B13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Core", "MassTransit.RedisSagas.Core\MassTransit.RedisSagas.Core.csproj", "{B18FE073-7BC2-4F67-86B4-96BD176897FB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Tests", "MassTransit.RedisSagas.Tests\MassTransit.RedisSagas.Tests.csproj", "{83A328B2-18C0-4A40-B576-3B51CBD7FD21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.RedLock", "MassTransit.RedisSagas.RedLock\MassTransit.RedisSagas.RedLock.csproj", "{F62524AF-34AA-42FC-B076-B3D2C3FC230C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.RedLock.Tests", "MassTransit.RedisSagas.RedLock.Tests\MassTransit.RedisSagas.RedLock.Tests.csproj", "{75A6C7B6-7725-4A49-BDE1-DD503C67064D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,14 +36,18 @@ Global
 		{CF70706F-36FF-4F67-B0D6-69DF90CC0B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF70706F-36FF-4F67-B0D6-69DF90CC0B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF70706F-36FF-4F67-B0D6-69DF90CC0B13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F62524AF-34AA-42FC-B076-B3D2C3FC230C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F62524AF-34AA-42FC-B076-B3D2C3FC230C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F62524AF-34AA-42FC-B076-B3D2C3FC230C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F62524AF-34AA-42FC-B076-B3D2C3FC230C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75A6C7B6-7725-4A49-BDE1-DD503C67064D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75A6C7B6-7725-4A49-BDE1-DD503C67064D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75A6C7B6-7725-4A49-BDE1-DD503C67064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75A6C7B6-7725-4A49-BDE1-DD503C67064D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,7 +55,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C7BC55BE-62B8-4466-AFA3-BB07016FE425} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
 		{CF70706F-36FF-4F67-B0D6-69DF90CC0B13} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
-		{B18FE073-7BC2-4F67-86B4-96BD176897FB} = {BE8C8157-29B1-42E1-8813-08261F5CDBF8}
+		{F62524AF-34AA-42FC-B076-B3D2C3FC230C} = {8E0AD4DC-7019-48B3-B662-5D1CC9BD5237}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4518F7A3-B231-4F01-ACFC-0B9E7B634217}

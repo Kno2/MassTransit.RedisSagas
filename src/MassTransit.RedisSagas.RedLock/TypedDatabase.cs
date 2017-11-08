@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using StackExchange.Redis;
-using MassTransit.RedisSagas;
 
-
-namespace MassTransit.RedisSagas
+namespace MassTransit.RedisSagas.RedLock
 {
     public class TypedDatabase<T> : ITypedDatabase<T> where T : class
     {
         readonly IDatabase _db;
 
-        public TypedDatabase(IDatabase db) => _db = db;
+        public TypedDatabase(IDatabase db)
+        {
+            _db = db;
+        }
 
         public async Task<T> Get(Guid key, string prefix = "")
         {
