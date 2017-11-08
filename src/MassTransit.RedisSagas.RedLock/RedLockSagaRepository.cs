@@ -59,26 +59,18 @@ namespace MassTransit.RedisSagas.RedLock
 
             if (policy.PreInsertInstance(context, out instance))
                 await PreInsertSagaInstance<T>(sagas, instance).ConfigureAwait(false);
-            try
+
+            if (instance == null)
             {
-
-
-                if (instance == null)
+                using (var distLock = _lockFactory.Create($"redislock:{context.CorrelationId.Value}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
                 {
-                    using (var distLock = _lockFactory.Create($"redislock:{context.CorrelationId.Value}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                    if (distLock.IsAcquired)
                     {
-                        if (distLock.IsAcquired)
-                        {
-                            instance = await sagas.Get(sagaId, _redisPrefix).ConfigureAwait(false);
-                        }
+                        instance = await sagas.Get(sagaId, _redisPrefix).ConfigureAwait(false);
                     }
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
 
 
             if (instance == null)
@@ -223,23 +215,13 @@ namespace MassTransit.RedisSagas.RedLock
 
                 if (!proxy.IsCompleted)
                 {
-                    try
+                    using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
                     {
-
-
-                        using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                        if (distLock.IsAcquired)
                         {
-                            if (distLock.IsAcquired)
-                            {
-                                // Work inside Lock
-                                await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
-                            }
+                            // Work inside Lock
+                            await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
                     }
                 }
             }
