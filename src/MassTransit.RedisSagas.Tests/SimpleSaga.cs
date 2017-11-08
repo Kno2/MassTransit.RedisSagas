@@ -4,7 +4,7 @@ using MassTransit.RedisSaga;
 using MassTransit.Saga;
 using MassTransit.RedisSagas;
 
-namespace MassTransit.RedisSagas.Test
+namespace MassTransit.RedisSagas.Tests
 {
     public class SimpleSaga :
     InitiatedBy<InitiateSimpleSaga>,

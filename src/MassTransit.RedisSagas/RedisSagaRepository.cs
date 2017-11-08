@@ -13,20 +13,23 @@ namespace MassTransit.RedisSagas
         IRetrieveSagaFromRepository<TSaga>
         where TSaga : class, IVersionedSaga
     {
-        static readonly ILog _log = Logger.Get<RedisSagaRepository<TSaga>>();
-        readonly Func<IDatabase> _redisDbFactory;
+        private static readonly ILog _log = Logger.Get<RedisSagaRepository<TSaga>>();
+
+        private readonly IConnectionMultiplexer _redisConnection;
         private readonly string _redisPrefix;
 
-        public RedisSagaRepository(Func<IDatabase> redisDbFactory, string redisPrefix)
+        public RedisSagaRepository(IConnectionMultiplexer redisConnection, string redisPrefix)
         {
+            _redisConnection = redisConnection;
             _redisPrefix = redisPrefix;
-            _redisDbFactory = redisDbFactory;
         }
 
-        public RedisSagaRepository(Func<IDatabase> redisDbFactory) => _redisDbFactory = redisDbFactory;
+        public RedisSagaRepository(IConnectionMultiplexer redisConnection) => _redisConnection = redisConnection;
 
-        public async Task<TSaga> GetSaga(Guid correlationId) =>
-            await _redisDbFactory().As<TSaga>().Get(correlationId, _redisPrefix).ConfigureAwait(false);
+        public async Task<TSaga> GetSaga(Guid correlationId)
+        {
+            return await _redisConnection.GetDatabase().As<TSaga>().Get(correlationId, _redisPrefix);
+        }
 
         public async Task Send<T>(ConsumeContext<T> context, ISagaPolicy<TSaga, T> policy,
             IPipe<SagaConsumeContext<TSaga, T>> next) where T : class
@@ -35,7 +38,7 @@ namespace MassTransit.RedisSagas
                 throw new SagaException("The CorrelationId was not specified", typeof(TSaga), typeof(T));
 
             var sagaId = context.CorrelationId.Value;
-            var db = _redisDbFactory();
+            var db = _redisConnection.GetDatabase();
             TSaga instance;
             ITypedDatabase<TSaga> sagas = db.As<TSaga>();
 
@@ -48,7 +51,7 @@ namespace MassTransit.RedisSagas
 
             if (instance == null)
             {
-                var missingSagaPipe = new MissingPipe<T>(db, next);
+                var missingSagaPipe = new MissingPipe<T>(db, next, _redisPrefix);
                 await policy.Missing(context, missingSagaPipe).ConfigureAwait(false);
             }
             else
@@ -68,7 +71,8 @@ namespace MassTransit.RedisSagas
             var scope = context.CreateScope("sagaRepository");
             scope.Set(new
             {
-                Persistence = "redis"
+                Persistence = "redis",
+                SagaType = TypeMetadataCache<TSaga>.ShortName,
             });
         }
 
@@ -81,7 +85,8 @@ namespace MassTransit.RedisSagas
                 if (_log.IsDebugEnabled)
                     _log.DebugFormat("SAGA:{0}:{1} Used {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId, TypeMetadataCache<T>.ShortName);
 
-                var sagaConsumeContext = new RedisSagaConsumeContext<TSaga, T>(_redisDbFactory(), context, instance);
+                var db = _redisConnection.GetDatabase();
+                var sagaConsumeContext = new RedisSagaConsumeContext<TSaga, T>(db, context, instance, _redisPrefix);
 
                 await policy.Existing(sagaConsumeContext, next).ConfigureAwait(false);
 
@@ -121,7 +126,8 @@ namespace MassTransit.RedisSagas
 
         async Task UpdateRedisSaga(TSaga instance)
         {
-            ITypedDatabase<TSaga> sagas = _redisDbFactory().As<TSaga>();
+            var db = _redisConnection.GetDatabase();
+            ITypedDatabase<TSaga> sagas = db.As<TSaga>();
 
             instance.Version++;
             var old = await sagas.Get(instance.CorrelationId, _redisPrefix).ConfigureAwait(false);
@@ -164,7 +170,7 @@ namespace MassTransit.RedisSagas
                         TypeMetadataCache<TMessage>.ShortName);
 
                 SagaConsumeContext<TSaga, TMessage> proxy = new RedisSagaConsumeContext<TSaga, TMessage>(_redisDb,
-                    context, context.Saga);
+                    context, context.Saga, _redisPrefix);
 
                 await _next.Send(proxy).ConfigureAwait(false);
 

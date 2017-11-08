@@ -1,7 +1,7 @@
 ﻿using System;
 using MassTransit.Saga;
 
-namespace MassTransit.RedisSagas.Test
+namespace MassTransit.RedisSagas.Tests
 {
     public class TestSaga : ISaga
     {

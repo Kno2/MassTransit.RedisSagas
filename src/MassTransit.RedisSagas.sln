@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Stro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Core", "MassTransit.RedisSagas.Core\MassTransit.RedisSagas.Core.csproj", "{B18FE073-7BC2-4F67-86B4-96BD176897FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Test", "MassTransit.RedisSagas.Test\MassTransit.RedisSagas.Test.csproj", "{E698AFEC-A5CD-4449-B641-1CE247690D03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Tests", "MassTransit.RedisSagas.Tests\MassTransit.RedisSagas.Tests.csproj", "{83A328B2-18C0-4A40-B576-3B51CBD7FD21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +38,10 @@ Global
 		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B18FE073-7BC2-4F67-86B4-96BD176897FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E698AFEC-A5CD-4449-B641-1CE247690D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E698AFEC-A5CD-4449-B641-1CE247690D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E698AFEC-A5CD-4449-B641-1CE247690D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E698AFEC-A5CD-4449-B641-1CE247690D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83A328B2-18C0-4A40-B576-3B51CBD7FD21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

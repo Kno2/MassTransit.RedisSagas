@@ -16,20 +16,21 @@ namespace MassTransit.RedisSagas
     {
         static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
         readonly IDatabase _redisDb;
+        private readonly string _redisPrefix;
 
-        public RedisSagaConsumeContext(IDatabase redisDb, ConsumeContext<TMessage> context, TSaga instance)
+        public RedisSagaConsumeContext(IDatabase redisDb, ConsumeContext<TMessage> context, TSaga instance, string redisPrefix = "")
             : base(context)
         {
             Saga = instance;
             _redisDb = redisDb;
+            _redisPrefix = redisPrefix;
         }
 
         Guid? MessageContext.CorrelationId => Saga.CorrelationId;
 
         SagaConsumeContext<TSaga, T> SagaConsumeContext<TSaga>.PopContext<T>()
         {
-            var context = this as SagaConsumeContext<TSaga, T>;
-            if (context == null)
+            if (!(this is SagaConsumeContext<TSaga, T> context))
                 throw new ContextException($"The ConsumeContext<{TypeMetadataCache<TMessage>.ShortName}> could not be cast to {TypeMetadataCache<T>.ShortName}");
 
             return context;
@@ -38,7 +39,7 @@ namespace MassTransit.RedisSagas
         async Task SagaConsumeContext<TSaga>.SetCompleted()
         {
             ITypedDatabase<TSaga> db = _redisDb.As<TSaga>();
-            await db.Delete(Saga.CorrelationId).ConfigureAwait(false);
+            await db.Delete(Saga.CorrelationId, _redisPrefix).ConfigureAwait(false);
 
             IsCompleted = true;
             if (Log.IsDebugEnabled)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MassTransit.RedisSagas.Tests;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
 using NUnit.Framework;
@@ -7,10 +8,10 @@ using RedisInside;
 using StackExchange.Redis;
 using Shouldly;
 
-namespace MassTransit.RedisSagas.Test
+namespace MassTransit.RedisSagas.Tests
 {
     [TestFixture]
-    public class LocateAnExistingSaga_WithPrefix : InMemoryTestFixture
+    public class LocateAnExistingSaga : InMemoryTestFixture
     {
         private Redis _redis;
         [OneTimeTearDown]
@@ -48,21 +49,21 @@ namespace MassTransit.RedisSagas.Test
             Guid sagaId = NewId.NextGuid();
             var message = new InitiateSimpleSaga(sagaId);
 
-            InputQueueSendEndpoint.Send(message);
+            await InputQueueSendEndpoint.Send(message);
 
             var found = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             found.ShouldBeTrue();
         }
 
-        public LocateAnExistingSaga_WithPrefix()
+        public LocateAnExistingSaga()
         {
             _redis = new Redis();
             var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
             {
                 EndPoints = { _redis.Endpoint}
             });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(() => clientManager.GetDatabase(), "MySagaPrefix"));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager));
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)

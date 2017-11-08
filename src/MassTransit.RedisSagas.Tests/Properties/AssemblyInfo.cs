@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MassTransit.RedisSagas.Test")]
+[assembly: AssemblyTitle("MassTransit.RedisSagas.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MassTransit.RedisSagas.Test")]
+[assembly: AssemblyProduct("MassTransit.RedisSagas.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e698afec-a5cd-4449-b641-1ce247690d03")]
+[assembly: Guid("83a328b2-18c0-4a40-b576-3b51cbd7fd21")]
 
 // Version information for an assembly consists of the following four values:
 //

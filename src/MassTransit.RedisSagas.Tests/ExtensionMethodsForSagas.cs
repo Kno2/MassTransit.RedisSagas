@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MassTransit.Saga;
 
-namespace MassTransit.RedisSagas.Test
+namespace MassTransit.RedisSagas.Tests
 {
     public static class ExtensionMethodsForSagas
     {

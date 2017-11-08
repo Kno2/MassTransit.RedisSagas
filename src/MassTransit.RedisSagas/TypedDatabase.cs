@@ -34,9 +34,9 @@ namespace MassTransit.RedisSagas
 
     public interface ITypedDatabase<T> where T : class
     {
-        Task<T> Get(Guid key, string keyPrefix = "");
-        Task Put(Guid key, T value, string keyPrefix = "");
-        Task Delete(Guid key, string keyPrefix = "");
+        Task<T> Get(Guid key, string keyPrefix);
+        Task Put(Guid key, T value, string keyPrefix);
+        Task Delete(Guid key, string keyPrefix);
     }
 
     public static class DatabaseExtensions
