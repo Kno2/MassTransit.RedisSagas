@@ -35,15 +35,15 @@ namespace MassTransit.RedisSagas.RedLock
 
         public async Task<TSaga> GetSaga(Guid correlationId)
         {
-            using (var distLock = _lockFactory.Create($"redislock:{correlationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
-            {
-                if (distLock.IsAcquired)
-                {
-                    var db = _redisConnection.GetDatabase();
-                    return await db.As<TSaga>().Get(correlationId, _redisPrefix);
-                }
-            }
-            return null;
+            //            using (var distLock = _lockFactory.Create($"redislock:{correlationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+            //            {
+            //                if (distLock.IsAcquired)
+            //                {
+            var db = _redisConnection.GetDatabase();
+            return await db.As<TSaga>().Get(correlationId, _redisPrefix);
+            //                }
+            //            }
+            //            return null;
         }
 
         public async Task Send<T>(ConsumeContext<T> context, ISagaPolicy<TSaga, T> policy,
@@ -59,16 +59,25 @@ namespace MassTransit.RedisSagas.RedLock
 
             if (policy.PreInsertInstance(context, out instance))
                 await PreInsertSagaInstance<T>(sagas, instance).ConfigureAwait(false);
-
-            if (instance == null)
+            try
             {
-                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+
+
+                if (instance == null)
                 {
-                    if (distLock.IsAcquired)
+                    using (var distLock = _lockFactory.Create($"redislock:{context.CorrelationId.Value}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
                     {
-                        instance = await sagas.Get(sagaId, _redisPrefix).ConfigureAwait(false);
+                        if (distLock.IsAcquired)
+                        {
+                            instance = await sagas.Get(sagaId, _redisPrefix).ConfigureAwait(false);
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
 
@@ -138,7 +147,7 @@ namespace MassTransit.RedisSagas.RedLock
                         await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
                     }
                 }
-                
+
 
                 if (_log.IsDebugEnabled)
                     _log.DebugFormat("SAGA:{0}:{1} Insert {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId,
@@ -214,13 +223,23 @@ namespace MassTransit.RedisSagas.RedLock
 
                 if (!proxy.IsCompleted)
                 {
-                    using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                    try
                     {
-                        if (distLock.IsAcquired)
+
+
+                        using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
                         {
-                            // Work inside Lock
-                            await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
+                            if (distLock.IsAcquired)
+                            {
+                                // Work inside Lock
+                                await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
                     }
                 }
             }

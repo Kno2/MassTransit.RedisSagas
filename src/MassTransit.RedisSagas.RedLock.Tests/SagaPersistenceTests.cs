@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
@@ -61,7 +63,7 @@ namespace MassTransit.RedisSagas.RedLock.Tests
             _redis = new Redis();
             var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
             {
-                EndPoints = { _redis.Endpoint}
+                EndPoints = { _redis.Endpoint }
             });
             var factory = new RedisLockFactory(new RedisLockEndPoint
             {
