@@ -139,6 +139,16 @@ Target "Package" (fun _ ->
                   PackageFile = @".\src\MassTransit.RedisSagas.StrongName\packages.config"
                   Files = [ (@"..\src\MassTransit.RedisSagas.StrongName\bin\Release\MassTransit.RedisSagas.*", Some @"lib\net46", None);
                             (@"..\src\MassTransit.RedisSagas.StrongName\**\*.cs", Some "src", None) ] }
+                { Project = "MassTransit.RedisSagas.RedLock"
+                  Summary = "MassTransit RedisSagas.RedLock, a persistence store for MassTransit using Redis and distributed locking"
+                  PackageFile = @".\src\MassTransit.RedisSagas.RedLock\packages.config"
+                  Files = [ (@"..\src\MassTransit.RedisSagas.RedLock\bin\Release\MassTransit.RedisSagas.RedLock.*", Some @"lib\net46", None);
+                            (@"..\src\MassTransit.RedisSagas.RedLock\**\*.cs", Some "src", None) ] }
+                { Project = "MassTransit.RedisSagas.RedLock.StrongName"
+                  Summary = "MassTransit RedisSagas.RedLock (Strong Name), a persistence store for MassTransit using Redis and distributed locking"
+                  PackageFile = @".\src\MassTransit.RedisSagas.RedLock.StrongName\packages.config"
+                  Files = [ (@"..\src\MassTransit.RedisSagas.RedLock.StrongName\bin\Release\MassTransit.RedisSagas.RedLock.StrongName*", Some @"lib\net46", None);
+                            (@"..\src\MassTransit.RedisSagas.RedLock.StrongName\**\*.cs", Some "src", None) ] }
              |]
 
   nugs
