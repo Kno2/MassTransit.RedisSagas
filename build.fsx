@@ -156,6 +156,9 @@ Target "Package" (fun _ ->
 
       let getDeps daNug : NugetDependencies =
         if daNug.Project = "MassTransit.RedisSagas" then (getDependencies daNug.PackageFile)
+        else if daNug.Project = "MassTransit.RedisSagas.StrongName" then (getDependencies daNug.PackageFile) 
+        else if daNug.Project = "MassTransit.RedisSagas.RedLock" then (getDependencies daNug.PackageFile) 
+        else if daNug.Project = "MassTransit.RedisSagas.RedLock.StrongName" then (getDependencies daNug.PackageFile) 
         else ("MassTransit.RedisSagas", NuGetVersion) :: (getDependencies daNug.PackageFile)
 
       let setParams defaults = {
