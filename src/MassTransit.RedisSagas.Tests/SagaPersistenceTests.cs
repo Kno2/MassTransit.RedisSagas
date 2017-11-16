@@ -18,6 +18,7 @@ namespace MassTransit.RedisSagas.Tests
         public void TearDownRedis() => _redis.Dispose();
 
         readonly Lazy<ISagaRepository<SimpleSaga>> _sagaRepository;
+        private ConnectionMultiplexer _clientManager;
 
         [Test]
         public async Task A_correlated_message_should_find_the_correct_saga()
@@ -54,16 +55,19 @@ namespace MassTransit.RedisSagas.Tests
             var found = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             found.ShouldBeTrue();
+            var db = _clientManager.GetDatabase(0);
+            var rawData = db.StringGet(sagaId.ToString());
+            rawData.ShouldNotBeNull();
         }
 
         public LocateAnExistingSaga()
         {
             _redis = new Redis();
-            var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
+            _clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
             {
                 EndPoints = { _redis.Endpoint}
             });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(_clientManager));
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)

@@ -69,15 +69,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRetreiveSagaFromRepository.cs" />
-    <Compile Include="ISagaSerializer.cs" />
-    <Compile Include="IVersionedSaga.cs" />
+    <Compile Include="..\MassTransit.RedisSagas\IRetreiveSagaFromRepository.cs">
+      <Link>IRetreiveSagaFromRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\ISagaSerializer.cs">
+      <Link>ISagaSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\IVersionedSaga.cs">
+      <Link>IVersionedSaga.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\RedisSagaConcurrencyException.cs">
+      <Link>RedisSagaConcurrencyException.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\RedisSagaConsumeContext.cs">
+      <Link>RedisSagaConsumeContext.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\RedisSagaRepository.cs">
+      <Link>RedisSagaRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\SagaSerializer.cs">
+      <Link>SagaSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\MassTransit.RedisSagas\TypedDatabase.cs">
+      <Link>TypedDatabase.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedisSagaConcurrencyException.cs" />
-    <Compile Include="RedisSagaConsumeContext.cs" />
-    <Compile Include="RedisSagaRepository.cs" />
-    <Compile Include="SagaSerializer.cs" />
-    <Compile Include="TypedDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
