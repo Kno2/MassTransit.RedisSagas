@@ -28,7 +28,7 @@ namespace MassTransit.RedisSagas
         public async Task Delete(Guid key, string prefix = "")
         {
             var cacheKey = string.IsNullOrEmpty(prefix) ? key.ToString() : $"{prefix}:{key}";
-            await _db.KeyDeleteAsync(key.ToString()).ConfigureAwait(false);
+            await _db.KeyDeleteAsync(cacheKey).ConfigureAwait(false);
         }
     }
 
