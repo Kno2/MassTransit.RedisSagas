@@ -12,10 +12,3 @@ test:
     - '**\*RedisSagas.Tests.dll'
 artifacts:
 - path: 'build_artifacts\*.nupkg'
-deploy:
-- provider: NuGet
-  api_key:
-    secure: SMGJALohgGcrJt9wAoRAzL9hfgLpulP7+vw0xY+TlFjEkScJbTfB0Ff9Y0FARDNL
-  skip_symbols: false
-  on:
-    branch: master
