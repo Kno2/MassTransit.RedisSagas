@@ -131,7 +131,7 @@ namespace MassTransit.RedisSagas.RedLock
         {
             try
             {
-                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(15)))
                 {
                     if (distLock.IsAcquired)
                     {
