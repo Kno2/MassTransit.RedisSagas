@@ -19,6 +19,11 @@ namespace MassTransit.RedisSagas.RedLock
         private readonly IRedisLockFactory _lockFactory;
         private readonly string _redisPrefix;
 
+        private static TimeSpan _expiry = TimeSpan.FromSeconds(20);
+        private static TimeSpan _wait = TimeSpan.FromSeconds(15);
+        private static TimeSpan _retryTime = TimeSpan.FromSeconds(1);
+
+
         public RedLockSagaRepository(IConnectionMultiplexer redisConnection, IRedisLockFactory lockFactory, string redisPrefix)
         {
             _redisConnection = redisConnection;
@@ -34,15 +39,8 @@ namespace MassTransit.RedisSagas.RedLock
 
         public async Task<TSaga> GetSaga(Guid correlationId)
         {
-            //            using (var distLock = _lockFactory.Create($"redislock:{correlationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
-            //            {
-            //                if (distLock.IsAcquired)
-            //                {
             var db = _redisConnection.GetDatabase();
             return await db.As<TSaga>().Get(correlationId, _redisPrefix);
-            //                }
-            //            }
-            //            return null;
         }
 
         public async Task Send<T>(ConsumeContext<T> context, ISagaPolicy<TSaga, T> policy,
@@ -61,7 +59,7 @@ namespace MassTransit.RedisSagas.RedLock
 
             if (instance == null)
             {
-                using (var distLock = _lockFactory.Create($"redislock:{context.CorrelationId.Value}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                using (var distLock = _lockFactory.Create($"redislock:{context.CorrelationId.Value}", _expiry, _wait, _retryTime))
                 {
                     if (distLock.IsAcquired)
                     {
@@ -130,7 +128,7 @@ namespace MassTransit.RedisSagas.RedLock
         {
             try
             {
-                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(15)))
+                using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", _expiry, _wait, _retryTime))
                 {
                     if (distLock.IsAcquired)
                     {
@@ -161,7 +159,7 @@ namespace MassTransit.RedisSagas.RedLock
             ITypedDatabase<TSaga> sagas = db.As<TSaga>();
 
             instance.Version++;
-            using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+            using (var distLock = _lockFactory.Create($"redislock:{instance.CorrelationId}", _expiry, _wait, _retryTime))
             {
                 if (distLock.IsAcquired)
                 {
@@ -214,7 +212,7 @@ namespace MassTransit.RedisSagas.RedLock
 
                 if (!proxy.IsCompleted)
                 {
-                    using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0.5)))
+                    using (var distLock = _lockFactory.Create($"redislock:{context.Saga.CorrelationId}", _expiry, _wait, _retryTime))
                     {
                         if (distLock.IsAcquired)
                         {
