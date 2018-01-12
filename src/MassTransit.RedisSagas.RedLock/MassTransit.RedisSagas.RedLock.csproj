@@ -59,9 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MassTransit.RedisSagas\IVersionedSaga.cs">
+      <Link>IVersionedSaga.cs</Link>
+    </Compile>
     <Compile Include="IRetreiveSagaFromRepository.cs" />
     <Compile Include="ISagaSerializer.cs" />
-    <Compile Include="IVersionedSaga.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisSagaConcurrencyException.cs" />
     <Compile Include="RedisSagaConsumeContext.cs" />
