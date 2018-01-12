@@ -71,6 +71,9 @@
     <Compile Include="..\MassTransit.RedisSagas.RedLock\ISagaSerializer.cs">
       <Link>ISagaSerializer.cs</Link>
     </Compile>
+    <Compile Include="..\MassTransit.RedisSagas.RedLock\IVersionedSaga.cs">
+      <Link>IVersionedSaga.cs</Link>
+    </Compile>
     <Compile Include="..\MassTransit.RedisSagas.RedLock\RedisSagaConcurrencyException.cs">
       <Link>RedisSagaConcurrencyException.cs</Link>
     </Compile>
@@ -85,9 +88,6 @@
     </Compile>
     <Compile Include="..\MassTransit.RedisSagas.RedLock\TypedDatabase.cs">
       <Link>TypedDatabase.cs</Link>
-    </Compile>
-    <Compile Include="..\MassTransit.RedisSagas\IVersionedSaga.cs">
-      <Link>IVersionedSaga.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
