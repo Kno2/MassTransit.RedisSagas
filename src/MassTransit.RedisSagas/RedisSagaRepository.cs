@@ -27,7 +27,7 @@ namespace MassTransit.RedisSagas
 
         public async Task<TSaga> GetSaga(Guid correlationId)
         {
-            return await _redisConnection.GetDatabase().As<TSaga>().Get(correlationId, _redisPrefix);
+            return await _redisConnection.GetDatabase().As<TSaga>().Get(correlationId, _redisPrefix).ConfigureAwait(false); ;
         }
 
         public async Task Send<T>(ConsumeContext<T> context, ISagaPolicy<TSaga, T> policy,
@@ -70,8 +70,7 @@ namespace MassTransit.RedisSagas
             var scope = context.CreateScope("sagaRepository");
             scope.Set(new
             {
-                Persistence = "redis",
-                SagaType = TypeMetadataCache<TSaga>.ShortName,
+                Persistence = "redis"
             });
         }
 

@@ -29,7 +29,8 @@ namespace MassTransit.RedisSagas
 
         SagaConsumeContext<TSaga, T> SagaConsumeContext<TSaga>.PopContext<T>()
         {
-            if (!(this is SagaConsumeContext<TSaga, T> context))
+            var context = this as SagaConsumeContext<TSaga, T>;
+            if (context == null)
                 throw new ContextException($"The ConsumeContext<{TypeMetadataCache<TMessage>.ShortName}> could not be cast to {TypeMetadataCache<T>.ShortName}");
 
             return context;
