@@ -16,11 +16,19 @@ namespace MassTransit.RedisSagas
 
         private readonly IConnectionMultiplexer _redisConnection;
         private readonly string _redisPrefix;
+        private readonly TimeSpan? _ttl;
 
-        public RedisSagaRepository(IConnectionMultiplexer redisConnection, string redisPrefix)
+        /// <summary>
+        /// Creates new RedisSagaRepository
+        /// </summary>
+        /// <param name="redisConnection"></param>
+        /// <param name="redisPrefix">String to prefix all keys with, will be delimited by a `:` e.g prefix:key</param>
+        /// <param name="expiry">Sets the TTL on all keys if present</param>
+        public RedisSagaRepository(IConnectionMultiplexer redisConnection, string redisPrefix, TimeSpan? expiry = null)
         {
             _redisConnection = redisConnection;
             _redisPrefix = redisPrefix;
+            _ttl = expiry;
         }
 
         public RedisSagaRepository(IConnectionMultiplexer redisConnection) => _redisConnection = redisConnection;
@@ -105,7 +113,7 @@ namespace MassTransit.RedisSagas
         {
             try
             {
-                await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
+                await sagas.Put(instance.CorrelationId, instance, _redisPrefix, _ttl).ConfigureAwait(false);
 
                 if (_log.IsDebugEnabled)
                     _log.DebugFormat("SAGA:{0}:{1} Insert {2}", TypeMetadataCache<TSaga>.ShortName, instance.CorrelationId,
@@ -132,7 +140,7 @@ namespace MassTransit.RedisSagas
             if (old.Version > instance.Version)
                 throw new RedisSagaConcurrencyException($"Version conflict for saga with id {instance.CorrelationId}");
 
-            await sagas.Put(instance.CorrelationId, instance, _redisPrefix).ConfigureAwait(false);
+            await sagas.Put(instance.CorrelationId, instance, _redisPrefix, _ttl).ConfigureAwait(false);
         }
 
 
@@ -147,12 +155,14 @@ namespace MassTransit.RedisSagas
             readonly IPipe<SagaConsumeContext<TSaga, TMessage>> _next;
             readonly IDatabase _redisDb;
             private readonly string _redisPrefix;
+            private readonly TimeSpan? _ttl;
 
-            public MissingPipe(IDatabase redisDb, IPipe<SagaConsumeContext<TSaga, TMessage>> next, string redisPrefix = "")
+            public MissingPipe(IDatabase redisDb, IPipe<SagaConsumeContext<TSaga, TMessage>> next, string redisPrefix = "", TimeSpan? ttl = null)
             {
                 _redisDb = redisDb;
                 _next = next;
                 _redisPrefix = redisPrefix;
+                _ttl = ttl;
             }
 
             void IProbeSite.Probe(ProbeContext context)
@@ -173,7 +183,7 @@ namespace MassTransit.RedisSagas
                 await _next.Send(proxy).ConfigureAwait(false);
 
                 if (!proxy.IsCompleted)
-                    await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix).ConfigureAwait(false);
+                    await _redisDb.As<TSaga>().Put(context.Saga.CorrelationId, context.Saga, _redisPrefix, _ttl).ConfigureAwait(false);
             }
         }
     }
