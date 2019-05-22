@@ -20,10 +20,10 @@ namespace MassTransit.RedisSagas.RedLock
             return value.IsNullOrEmpty ? null : SagaSerializer.Deserialize<T>(value);
         }
 
-        public async Task Put(Guid key, T value, string prefix = "")
+        public async Task Put(Guid key, T value, string prefix = "", TimeSpan? ttl = null)
         {
             var cacheKey = string.IsNullOrEmpty(prefix) ? key.ToString() : $"{prefix}:{key}";
-            await _db.StringSetAsync(cacheKey, SagaSerializer.Serialize(value)).ConfigureAwait(false);
+            await _db.StringSetAsync(cacheKey, SagaSerializer.Serialize(value), ttl).ConfigureAwait(false);
         }
 
         public async Task Delete(Guid key, string prefix = "")
@@ -36,7 +36,7 @@ namespace MassTransit.RedisSagas.RedLock
     public interface ITypedDatabase<T> where T : class
     {
         Task<T> Get(Guid key, string keyPrefix);
-        Task Put(Guid key, T value, string keyPrefix);
+        Task Put(Guid key, T value, string keyPrefix, TimeSpan? expiry = null);
         Task Delete(Guid key, string keyPrefix);
     }
 
