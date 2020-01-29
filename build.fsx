@@ -134,21 +134,11 @@ Target "Package" (fun _ ->
                   PackageFile = @".\src\MassTransit.RedisSagas\packages.config"
                   Files = [ (@"..\src\MassTransit.RedisSagas\bin\Release\MassTransit.RedisSagas.*", Some @"lib\net46", None);
                             (@"..\src\MassTransit.RedisSagas\**\*.cs", Some "src", None) ] }
-                { Project = "MassTransit.RedisSagas.StrongName"
-                  Summary = "MassTransit RedisSagas (Strong Name), a persistence store for MassTransit using Redis"
-                  PackageFile = @".\src\MassTransit.RedisSagas.StrongName\packages.config"
-                  Files = [ (@"..\src\MassTransit.RedisSagas.StrongName\bin\Release\MassTransit.RedisSagas.*", Some @"lib\net46", None);
-                            (@"..\src\MassTransit.RedisSagas.StrongName\**\*.cs", Some "src", None) ] }
                 { Project = "MassTransit.RedisSagas.RedLock"
                   Summary = "MassTransit RedisSagas.RedLock, a persistence store for MassTransit using Redis and distributed locking"
                   PackageFile = @".\src\MassTransit.RedisSagas.RedLock\packages.config"
                   Files = [ (@"..\src\MassTransit.RedisSagas.RedLock\bin\Release\MassTransit.RedisSagas.RedLock.*", Some @"lib\net46", None);
                             (@"..\src\MassTransit.RedisSagas.RedLock\**\*.cs", Some "src", None) ] }
-                { Project = "MassTransit.RedisSagas.RedLock.StrongName"
-                  Summary = "MassTransit RedisSagas.RedLock (Strong Name), a persistence store for MassTransit using Redis and distributed locking"
-                  PackageFile = @".\src\MassTransit.RedisSagas.RedLock.StrongName\packages.config"
-                  Files = [ (@"..\src\MassTransit.RedisSagas.RedLock.StrongName\bin\Release\MassTransit.RedisSagas.RedLock.StrongName*", Some @"lib\net46", None);
-                            (@"..\src\MassTransit.RedisSagas.RedLock.StrongName\**\*.cs", Some "src", None) ] }
              |]
 
   nugs
@@ -156,9 +146,7 @@ Target "Package" (fun _ ->
 
       let getDeps daNug : NugetDependencies =
         if daNug.Project = "MassTransit.RedisSagas" then (getDependencies daNug.PackageFile)
-        else if daNug.Project = "MassTransit.RedisSagas.StrongName" then (getDependencies daNug.PackageFile) 
         else if daNug.Project = "MassTransit.RedisSagas.RedLock" then (getDependencies daNug.PackageFile) 
-        else if daNug.Project = "MassTransit.RedisSagas.RedLock.StrongName" then (getDependencies daNug.PackageFile) 
         else ("MassTransit.RedisSagas", NuGetVersion) :: (getDependencies daNug.PackageFile)
 
       let setParams defaults = {
