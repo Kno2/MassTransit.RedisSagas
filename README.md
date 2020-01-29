@@ -5,6 +5,10 @@ StackExchange Redis Saga Persistence for MassTransit
 
 This library uses `StackExchange.Redis` to connect to your redis instance. Refer to the [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Basics.md) Documentation for more detail on configuring your client.
 
+## Note
+
+As of version `2.0`+ this repository will no longer support the StrongNamed version of Redis
+
 ### Installation
 
 Install using nuget: `Install-Package MassTransit.RedisSagas`
