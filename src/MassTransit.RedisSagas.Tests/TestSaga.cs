@@ -5,7 +5,7 @@ namespace MassTransit.RedisSagas.Tests
 {
     public class TestSaga : ISaga
     {
-        public Guid CorrelationId { get; set; }
         public Guid Id => CorrelationId;
+        public Guid CorrelationId { get; set; }
     }
 }

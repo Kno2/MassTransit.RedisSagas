@@ -6,7 +6,7 @@ namespace MassTransit.RedisSagas.RedLock
 {
     public class TypedDatabase<T> : ITypedDatabase<T> where T : class
     {
-        readonly IDatabase _db;
+        private readonly IDatabase _db;
 
         public TypedDatabase(IDatabase db)
         {
@@ -42,9 +42,10 @@ namespace MassTransit.RedisSagas.RedLock
 
     public static class DatabaseExtensions
     {
-        public static ITypedDatabase<T> As<T>(this IDatabase db) where T : class =>
-            new TypedDatabase<T>(db);
+        public static ITypedDatabase<T> As<T>(this IDatabase db) where T : class
+        {
+            return new TypedDatabase<T>(db);
+        }
     }
 
-    
 }

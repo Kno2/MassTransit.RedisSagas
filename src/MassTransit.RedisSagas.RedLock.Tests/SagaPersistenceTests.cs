@@ -1,30 +1,50 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Net;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
 using NUnit.Framework;
 using RedisInside;
-using RedLock;
-using StackExchange.Redis;
+using RedLockNet.SERedis;
+using RedLockNet.SERedis.Configuration;
 using Shouldly;
+using StackExchange.Redis;
 
 namespace MassTransit.RedisSagas.RedLock.Tests
 {
     [TestFixture]
     public class LocateAnExistingSaga : InMemoryTestFixture
     {
-        private Redis _redis;
-        [OneTimeTearDown]
-        public void TearDownRedis() => _redis.Dispose();
+        private readonly Redis _redis;
 
-        readonly Lazy<ISagaRepository<SimpleSaga>> _sagaRepository;
+        [OneTimeTearDown]
+        public void TearDownRedis()
+        {
+            _redis.Dispose();
+        }
+
+        private readonly Lazy<ISagaRepository<SimpleSaga>> _sagaRepository;
+
+        public LocateAnExistingSaga()
+        {
+            _redis = new Redis();
+            var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions
+            {
+                EndPoints = {_redis.Endpoint}
+            });
+            var factory = new RedLockFactory(new RedLockConfiguration(new List<RedLockEndPoint> {new RedLockEndPoint(_redis.Endpoint)}));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedLockSagaRepository<SimpleSaga>(clientManager, factory));
+        }
+
+        protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
+        {
+            configurator.Saga(_sagaRepository.Value);
+        }
 
         [Test]
         public async Task A_correlated_message_should_find_the_correct_saga()
         {
-            Guid sagaId = NewId.NextGuid();
+            var sagaId = NewId.NextGuid();
             var message = new InitiateSimpleSaga(sagaId);
 
             await InputQueueSendEndpoint.Send(message).ConfigureAwait(false);
@@ -33,7 +53,7 @@ namespace MassTransit.RedisSagas.RedLock.Tests
 
             found.ShouldBeTrue();
 
-            var nextMessage = new CompleteSimpleSaga { CorrelationId = sagaId };
+            var nextMessage = new CompleteSimpleSaga {CorrelationId = sagaId};
 
             await InputQueueSendEndpoint.Send(nextMessage).ConfigureAwait(false);
 
@@ -48,7 +68,7 @@ namespace MassTransit.RedisSagas.RedLock.Tests
         [Test]
         public async Task An_initiating_message_should_start_the_saga()
         {
-            Guid sagaId = NewId.NextGuid();
+            var sagaId = NewId.NextGuid();
             var message = new InitiateSimpleSaga(sagaId);
 
             await InputQueueSendEndpoint.Send(message);
@@ -56,25 +76,6 @@ namespace MassTransit.RedisSagas.RedLock.Tests
             var found = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             found.ShouldBeTrue();
-        }
-
-        public LocateAnExistingSaga()
-        {
-            _redis = new Redis();
-            var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
-            {
-                EndPoints = { _redis.Endpoint }
-            });
-            var factory = new RedisLockFactory(new RedisLockEndPoint
-            {
-                EndPoint = _redis.Endpoint
-            });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedLockSagaRepository<SimpleSaga>(clientManager, factory));
-        }
-
-        protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
-        {
-            configurator.Saga(_sagaRepository.Value);
         }
     }
 }

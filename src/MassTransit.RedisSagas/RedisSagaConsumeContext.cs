@@ -7,18 +7,13 @@ using StackExchange.Redis;
 
 namespace MassTransit.RedisSagas
 {
-    public class RedisSagaConsumeContext<TSaga, TMessage> :
-        ConsumeContextProxyScope<TMessage>,
-        SagaConsumeContext<TSaga, TMessage>
-        where TMessage : class
-        where TSaga : class, IVersionedSaga
+    public class RedisSagaConsumeContext<TSaga, TMessage> : ConsumeContextProxyScope<TMessage>, SagaConsumeContext<TSaga, TMessage> where TMessage : class where TSaga : class, IVersionedSaga
     {
-        static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
-        readonly IDatabase _redisDb;
+        private static readonly ILog Log = Logger.Get<RedisSagaRepository<TSaga>>();
+        private readonly IDatabase _redisDb;
         private readonly string _redisPrefix;
 
-        public RedisSagaConsumeContext(IDatabase redisDb, ConsumeContext<TMessage> context, TSaga instance, string redisPrefix = "")
-            : base(context)
+        public RedisSagaConsumeContext(IDatabase redisDb, ConsumeContext<TMessage> context, TSaga instance, string redisPrefix = "") : base(context)
         {
             Saga = instance;
             _redisDb = redisDb;
@@ -38,13 +33,12 @@ namespace MassTransit.RedisSagas
 
         async Task SagaConsumeContext<TSaga>.SetCompleted()
         {
-            ITypedDatabase<TSaga> db = _redisDb.As<TSaga>();
+            var db = _redisDb.As<TSaga>();
             await db.Delete(Saga.CorrelationId, _redisPrefix).ConfigureAwait(false);
 
             IsCompleted = true;
             if (Log.IsDebugEnabled)
-                Log.DebugFormat("SAGA:{0}:{1} Removed {2}", TypeMetadataCache<TSaga>.ShortName, TypeMetadataCache<TMessage>.ShortName,
-                    Saga.CorrelationId);
+                Log.DebugFormat("SAGA:{0}:{1} Removed {2}", TypeMetadataCache<TSaga>.ShortName, TypeMetadataCache<TMessage>.ShortName, Saga.CorrelationId);
         }
 
         public TSaga Saga { get; }

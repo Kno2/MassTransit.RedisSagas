@@ -1,29 +1,47 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MassTransit.RedisSagas.Tests;
 using MassTransit.Saga;
 using MassTransit.TestFramework;
 using NUnit.Framework;
 using RedisInside;
-using StackExchange.Redis;
 using Shouldly;
+using StackExchange.Redis;
 
 namespace MassTransit.RedisSagas.Tests
 {
     [TestFixture]
     public class LocateAnExistingSaga : InMemoryTestFixture
     {
-        private Redis _redis;
-        [OneTimeTearDown]
-        public void TearDownRedis() => _redis.Dispose();
+        private readonly Redis _redis;
 
-        readonly Lazy<ISagaRepository<SimpleSaga>> _sagaRepository;
-        private ConnectionMultiplexer _clientManager;
+        [OneTimeTearDown]
+        public void TearDownRedis()
+        {
+            _redis.Dispose();
+        }
+
+        private readonly Lazy<ISagaRepository<SimpleSaga>> _sagaRepository;
+        private readonly ConnectionMultiplexer _clientManager;
+
+        public LocateAnExistingSaga()
+        {
+            _redis = new Redis();
+            _clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions
+            {
+                EndPoints = {_redis.Endpoint}
+            });
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(_clientManager));
+        }
+
+        protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
+        {
+            configurator.Saga(_sagaRepository.Value);
+        }
 
         [Test]
         public async Task A_correlated_message_should_find_the_correct_saga()
         {
-            Guid sagaId = NewId.NextGuid();
+            var sagaId = NewId.NextGuid();
             var message = new InitiateSimpleSaga(sagaId);
 
             await InputQueueSendEndpoint.Send(message).ConfigureAwait(false);
@@ -32,7 +50,7 @@ namespace MassTransit.RedisSagas.Tests
 
             found.ShouldBeTrue();
 
-            var nextMessage = new CompleteSimpleSaga { CorrelationId = sagaId };
+            var nextMessage = new CompleteSimpleSaga {CorrelationId = sagaId};
 
             await InputQueueSendEndpoint.Send(nextMessage).ConfigureAwait(false);
 
@@ -47,7 +65,7 @@ namespace MassTransit.RedisSagas.Tests
         [Test]
         public async Task An_initiating_message_should_start_the_saga()
         {
-            Guid sagaId = NewId.NextGuid();
+            var sagaId = NewId.NextGuid();
             var message = new InitiateSimpleSaga(sagaId);
 
             await InputQueueSendEndpoint.Send(message);
@@ -58,21 +76,6 @@ namespace MassTransit.RedisSagas.Tests
             var db = _clientManager.GetDatabase(0);
             var rawData = db.StringGet(sagaId.ToString());
             rawData.ShouldNotBeNull();
-        }
-
-        public LocateAnExistingSaga()
-        {
-            _redis = new Redis();
-            _clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions()
-            {
-                EndPoints = { _redis.Endpoint}
-            });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(_clientManager));
-        }
-
-        protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
-        {
-            configurator.Saga(_sagaRepository.Value);
         }
     }
 }

@@ -6,9 +6,12 @@ namespace MassTransit.RedisSagas
 {
     public class TypedDatabase<T> : ITypedDatabase<T> where T : class
     {
-        readonly IDatabase _db;
+        private readonly IDatabase _db;
 
-        public TypedDatabase(IDatabase db) => _db = db;
+        public TypedDatabase(IDatabase db)
+        {
+            _db = db;
+        }
 
         public async Task<T> Get(Guid key, string prefix = "")
         {
@@ -39,9 +42,10 @@ namespace MassTransit.RedisSagas
 
     public static class DatabaseExtensions
     {
-        public static ITypedDatabase<T> As<T>(this IDatabase db) where T : class =>
-            new TypedDatabase<T>(db);
+        public static ITypedDatabase<T> As<T>(this IDatabase db) where T : class
+        {
+            return new TypedDatabase<T>(db);
+        }
     }
 
-    
 }

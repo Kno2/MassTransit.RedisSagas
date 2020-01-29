@@ -4,15 +4,14 @@ using MassTransit.Saga;
 
 namespace MassTransit.RedisSagas.RedLock.Tests
 {
-    public class SimpleSaga :
-    InitiatedBy<InitiateSimpleSaga>,
-    Orchestrates<CompleteSimpleSaga>,
-    ISaga, IVersionedSaga
+    public class SimpleSaga : InitiatedBy<InitiateSimpleSaga>, Orchestrates<CompleteSimpleSaga>, ISaga, IVersionedSaga
     {
         public bool Completed { get; set; }
         public bool Initiated { get; set; }
         public bool Observed { get; set; }
         public string Name { get; set; }
+
+        public Guid Id => CorrelationId;
 
         public async Task Consume(ConsumeContext<InitiateSimpleSaga> context)
         {
@@ -21,6 +20,7 @@ namespace MassTransit.RedisSagas.RedLock.Tests
         }
 
         public Guid CorrelationId { get; set; }
+        public int Version { get; set; }
 
         //public async Task Consume(ConsumeContext<ObservableSagaMessage> message)
         //{
@@ -36,8 +36,5 @@ namespace MassTransit.RedisSagas.RedLock.Tests
         {
             Completed = true;
         }
-
-        public Guid Id => CorrelationId;
-        public int Version { get; set; }
     }
 }

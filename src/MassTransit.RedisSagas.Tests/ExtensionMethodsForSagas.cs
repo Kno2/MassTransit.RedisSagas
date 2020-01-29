@@ -6,10 +6,9 @@ namespace MassTransit.RedisSagas.Tests
 {
     public static class ExtensionMethodsForSagas
     {
-        public static async Task<bool> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId, TimeSpan timeout)
-           where TSaga : class, ISaga
+        public static async Task<bool> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId, TimeSpan timeout) where TSaga : class, ISaga
         {
-            DateTime giveUpAt = DateTime.Now + timeout;
+            var giveUpAt = DateTime.Now + timeout;
 
             while (DateTime.Now < giveUpAt)
             {
@@ -21,10 +20,9 @@ namespace MassTransit.RedisSagas.Tests
             return false;
         }
 
-        public static async Task<bool> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId, Func<TSaga, bool> condition, TimeSpan timeout)
-           where TSaga : class, ISaga
+        public static async Task<bool> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId, Func<TSaga, bool> condition, TimeSpan timeout) where TSaga : class, ISaga
         {
-            DateTime giveUpAt = DateTime.Now + timeout;
+            var giveUpAt = DateTime.Now + timeout;
 
             while (DateTime.Now < giveUpAt)
             {

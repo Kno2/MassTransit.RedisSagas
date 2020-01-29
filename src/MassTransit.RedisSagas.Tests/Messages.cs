@@ -19,9 +19,13 @@ namespace MassTransit.RedisSagas.Tests
     [Serializable]
     public class InitiateSimpleSaga : SimpleSagaMessageBase
     {
-        public InitiateSimpleSaga() { }
+        public InitiateSimpleSaga()
+        {
+        }
 
-        public InitiateSimpleSaga(Guid correlationId) : base(correlationId) { }
+        public InitiateSimpleSaga(Guid correlationId) : base(correlationId)
+        {
+        }
 
         public string Name { get; set; }
     }
@@ -29,8 +33,12 @@ namespace MassTransit.RedisSagas.Tests
     [Serializable]
     public class CompleteSimpleSaga : SimpleSagaMessageBase
     {
-        public CompleteSimpleSaga() { }
+        public CompleteSimpleSaga()
+        {
+        }
 
-        public CompleteSimpleSaga(Guid correlationId) : base(correlationId) { }
+        public CompleteSimpleSaga(Guid correlationId) : base(correlationId)
+        {
+        }
     }
 }
