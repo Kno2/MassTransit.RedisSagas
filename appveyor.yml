@@ -1,11 +1,19 @@
-version: 2.0.{build}
+version: 6.3.2.{build}
 image: Visual Studio 2017
+
+skip_commits:
+  files:
+    - docs/**/*
+    - package.json
+    - docs.yml
+    - readme.md
+    
 configuration: Release
 cache: packages -> **\packages.config
 before_build:
 - cmd: nuget restore src/MassTransit.RedisSagas.sln
 build_script:
-- cmd: build.bat
+  - ps: .\Build.ps1
 test:
   assemblies:
     only:
