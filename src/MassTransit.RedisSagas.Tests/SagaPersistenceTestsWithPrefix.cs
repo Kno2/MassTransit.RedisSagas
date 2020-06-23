@@ -27,9 +27,10 @@ namespace MassTransit.RedisSagas.Tests
             _redis = new Redis();
             var clientManager = ConnectionMultiplexer.Connect(new ConfigurationOptions
             {
-                EndPoints = {_redis.Endpoint}
+                EndPoints = { _redis.Endpoint }
             });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager, "prefix"));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(() => clientManager.GetDatabase(), keyPrefix: "test", optimistic: false, lockTimeout: TimeSpan.FromSeconds(30), expiry:TimeSpan.FromDays(14)));
+
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
@@ -49,14 +50,14 @@ namespace MassTransit.RedisSagas.Tests
 
             found.ShouldBeTrue();
 
-            var nextMessage = new CompleteSimpleSaga {CorrelationId = sagaId};
+            var nextMessage = new CompleteSimpleSaga { CorrelationId = sagaId };
 
             await InputQueueSendEndpoint.Send(nextMessage).ConfigureAwait(false);
 
             found = await _sagaRepository.Value.ShouldContainSaga(sagaId, x => x.Completed, TestTimeout).ConfigureAwait(false);
             found.ShouldBeTrue();
-            var retrieveRepository = _sagaRepository.Value as IRetrieveSagaFromRepository<SimpleSaga>;
-            var retrieved = await retrieveRepository.GetSaga(sagaId);
+            var retrieveRepository = _sagaRepository.Value as ILoadSagaRepository<SimpleSaga>;
+            var retrieved = await retrieveRepository.Load(sagaId);
             retrieved.ShouldNotBeNull();
             retrieved.Completed.ShouldBeTrue();
         }

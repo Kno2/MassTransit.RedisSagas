@@ -248,3 +248,14 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+
+
+# Cake
+tools/**
+!tools/packages.config
+
+# Artifacts
+artifacts/**
+artifacts_old/**
+/src/.ionide

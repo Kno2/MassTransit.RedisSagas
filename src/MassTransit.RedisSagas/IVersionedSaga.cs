@@ -2,7 +2,8 @@
 
 namespace MassTransit.RedisSagas
 {
-    public interface IVersionedSaga : ISaga
+    public interface IVersionedSaga :
+        ISaga
     {
         int Version { get; set; }
     }

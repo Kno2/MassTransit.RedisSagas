@@ -12,7 +12,7 @@ namespace MassTransit.RedisSagas.Tests
 
             while (DateTime.Now < giveUpAt)
             {
-                var saga = await (repository as IRetrieveSagaFromRepository<TSaga>).GetSaga(sagaId);
+                var saga = await (repository as ILoadSagaRepository<TSaga>).Load(sagaId);
                 if (saga != null) return true;
                 Task.Delay(10);
             }
@@ -26,7 +26,7 @@ namespace MassTransit.RedisSagas.Tests
 
             while (DateTime.Now < giveUpAt)
             {
-                var saga = await (repository as IRetrieveSagaFromRepository<TSaga>).GetSaga(sagaId);
+                var saga = await (repository as ILoadSagaRepository<TSaga>).Load(sagaId);
                 if (condition(saga)) return true;
                 await Task.Delay(10);
             }
