@@ -12,7 +12,7 @@
     public class RedisSagaConsumeContext<TSaga, TMessage> :
         ConsumeContextScope<TMessage>,
         SagaConsumeContext<TSaga, TMessage>,
-        IAsyncDisposable
+        GreenPipes.IAsyncDisposable
         where TMessage : class
         where TSaga : class, IVersionedSaga
     {

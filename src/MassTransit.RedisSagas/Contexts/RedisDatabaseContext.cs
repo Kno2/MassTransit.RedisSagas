@@ -9,8 +9,8 @@ namespace MassTransit.RedisSagas.Contexts
     using Policies;
     using StackExchange.Redis;
     using Util;
-    using MassTransit.RedisSagas;
-    using MassTransit.RedisSagas.Exceptions;
+    using RedisSagas;
+    using Exceptions;
 
     public class RedisDatabaseContext<TSaga> :
         DatabaseContext<TSaga>
@@ -19,7 +19,7 @@ namespace MassTransit.RedisSagas.Contexts
         readonly IDatabase _database;
         readonly RedisSagaRepositoryOptions<TSaga> _options;
 
-        IAsyncDisposable _lock;
+        GreenPipes.IAsyncDisposable _lock;
 
         public RedisDatabaseContext(IDatabase database, RedisSagaRepositoryOptions<TSaga> options)
         {
@@ -73,7 +73,7 @@ namespace MassTransit.RedisSagas.Contexts
         {
             var instance = context.Saga;
 
-            IAsyncDisposable updateLock = _options.ConcurrencyMode == ConcurrencyMode.Optimistic
+            GreenPipes.IAsyncDisposable updateLock = _options.ConcurrencyMode == ConcurrencyMode.Optimistic
                 ? updateLock = await Lock(instance, context.CancellationToken).ConfigureAwait(false)
                 : null;
 
@@ -136,7 +136,7 @@ namespace MassTransit.RedisSagas.Contexts
             _lock = await sagaLock.Lock(cancellationToken).ConfigureAwait(false);
         }
 
-        Task<IAsyncDisposable> Lock(TSaga instance, CancellationToken cancellationToken)
+        Task<GreenPipes.IAsyncDisposable> Lock(TSaga instance, CancellationToken cancellationToken)
         {
             var sagaLock = new SagaLock(_database, _options, instance.CorrelationId);
 
@@ -162,7 +162,7 @@ namespace MassTransit.RedisSagas.Contexts
 
 
         class SagaLock :
-            IAsyncDisposable
+            GreenPipes.IAsyncDisposable
         {
             readonly IDatabase _db;
             readonly RedisKey _key;
@@ -190,9 +190,9 @@ namespace MassTransit.RedisSagas.Contexts
                 }
             }
 
-            public Task<IAsyncDisposable> Lock(CancellationToken cancellationToken)
+            public Task<GreenPipes.IAsyncDisposable> Lock(CancellationToken cancellationToken)
             {
-                async Task<IAsyncDisposable> LockAsync()
+                async Task<GreenPipes.IAsyncDisposable> LockAsync()
                 {
                     var result = await _db.LockTakeAsync(_key, _token, _options.LockTimeout).ConfigureAwait(false);
 

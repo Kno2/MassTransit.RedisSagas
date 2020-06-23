@@ -2,11 +2,10 @@ namespace MassTransit.RedisSagas.Contexts
 {
     using System;
     using System.Threading.Tasks;
-    using GreenPipes;
 
 
     public interface DatabaseContext<TSaga> :
-        IAsyncDisposable
+        GreenPipes.IAsyncDisposable
         where TSaga : class, IVersionedSaga
     {
         Task Add<T>(SagaConsumeContext<TSaga, T> context)

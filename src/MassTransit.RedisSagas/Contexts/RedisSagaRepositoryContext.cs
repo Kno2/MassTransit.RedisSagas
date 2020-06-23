@@ -11,7 +11,7 @@ namespace MassTransit.RedisSagas.Contexts
     public class RedisSagaRepositoryContext<TSaga, TMessage> :
         ConsumeContextScope<TMessage>,
         SagaRepositoryContext<TSaga, TMessage>,
-        IAsyncDisposable
+        GreenPipes.IAsyncDisposable
         where TSaga : class, IVersionedSaga
         where TMessage : class
     {
@@ -76,7 +76,7 @@ namespace MassTransit.RedisSagas.Contexts
     public class RedisSagaRepositoryContext<TSaga> :
         BasePipeContext,
         SagaRepositoryContext<TSaga>,
-        IAsyncDisposable
+        GreenPipes.IAsyncDisposable
         where TSaga : class, IVersionedSaga
     {
         readonly DatabaseContext<TSaga> _context;
