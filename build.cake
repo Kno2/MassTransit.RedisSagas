@@ -138,6 +138,9 @@ Task("Pack")
     .WithCriteria<BuildParameters>((context,data) => data.ShouldPublish)
     .Does<BuildParameters>(data =>
 {
+
+Information(data.Version);
+
     var settings = new DotNetCorePackSettings{
         NoRestore = true,
         NoBuild = true,
