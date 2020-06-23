@@ -1,7 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>MassTransit.RedisSagas</PackageId>
+    <Title>MassTransit.RedisSagas</Title>
+    <PackageTags>MassTransit;Redis</PackageTags>
+    <Description>MassTransit Redis Saga persistence support; $(Description)</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +20,12 @@
     <Reference Include="MassTransit">
       <HintPath>..\packages\MassTransit.6.3.2\lib\net461\MassTransit.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
 
 </Project>

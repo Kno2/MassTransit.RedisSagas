@@ -24,10 +24,11 @@ public class BuildVersion
 
         string suffix = "alpha.9999";
         string metadata = null;
-		string simpleVersion = null;
+		int buildNumber = 1;
+		
         if(!buildParameters.IsLocalBuild)
         {
-            var buildNumber = buildSystem.AppVeyor.Environment.Build.Number;
+            buildNumber = buildSystem.AppVeyor.Environment.Build.Number;
             var commitHash = buildSystem.AppVeyor.Environment.Repository.Commit.Id;
             commitHash = commitHash.Substring(0,Math.Min(commitHash.Length,7));
 
@@ -35,7 +36,6 @@ public class BuildVersion
                 buildParameters.IsMasterBranch ? null
                 : buildParameters.IsDevelopBranch ? "develop"
                 : "beta";
-			simpleVersion = $"{prefix}.{buildNumber}";
 
             if(suffix != null)
             {
@@ -54,8 +54,7 @@ public class BuildVersion
             Prefix = prefix,
             Suffix = suffix,
             Metadata = metadata,
-			SimpleVersion = simpleVersion ?? $"{prefix}.{suffix}"
-			
+			SimpleVersion = $"{prefix}.{buildNumber}"
         };
     }
 }
