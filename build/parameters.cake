@@ -49,7 +49,7 @@ public class BuildParameters
             IsRunningOnWindows = context.IsRunningOnWindows(),
             IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor,
             IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest,
-            IsMainMassTransitRepo = StringComparer.OrdinalIgnoreCase.Equals("masstransit/masstransit", buildSystem.AppVeyor.Environment.Repository.Name),
+            IsMainMassTransitRepo = StringComparer.OrdinalIgnoreCase.Equals("Kno2/MassTransit.RedisSagas", buildSystem.AppVeyor.Environment.Repository.Name),
             IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch),
             IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch)
               || StringComparer.OrdinalIgnoreCase.Equals("v6", buildSystem.AppVeyor.Environment.Repository.Branch),
