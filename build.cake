@@ -77,7 +77,7 @@ Task("Build")
     var settings = new DotNetCoreBuildSettings{
         NoRestore = true,
         Configuration = data.Configuration,
-        MSBuildSettings = new DotNetCoreMSBuildSettings().WithProperty("Version", data.Version.Version)
+        MSBuildSettings = new DotNetCoreMSBuildSettings().WithProperty("Version", data.Version.SimpleVersion)
     };
 
     DotNetCoreBuild(data.Paths.Directories.Solution.FullPath, settings);
@@ -139,14 +139,12 @@ Task("Pack")
     .Does<BuildParameters>(data =>
 {
 
-Information(data.Version);
-
     var settings = new DotNetCorePackSettings{
         NoRestore = true,
         NoBuild = true,
         OutputDirectory = data.Paths.Directories.Artifacts,
         Configuration = data.Configuration,
-        MSBuildSettings = new DotNetCoreMSBuildSettings().WithProperty("Version", data.Version.Version)
+        MSBuildSettings = new DotNetCoreMSBuildSettings().WithProperty("Version", data.Version.SimpleVersion)
     };
     DotNetCorePack(data.Paths.Directories.Solution.FullPath, settings);
 });

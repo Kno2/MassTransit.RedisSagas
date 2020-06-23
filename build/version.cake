@@ -5,7 +5,7 @@ public class BuildVersion
     public string Metadata { get; set; }
 
     public string Version => (Prefix + "-" + Suffix).Trim('-') + Metadata;
-
+	public string SimpleVersion => context.EnvironmentVariable("APPVEYOR_BUILD_VERSION") ?? "1.0.0";
     public static BuildVersion Calculate(ICakeContext context, BuildParameters buildParameters)
     {
         if (context == null)
