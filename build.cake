@@ -32,6 +32,27 @@ Task("Clean")
     CleanDirectories($"./src/**/obj/{data.Configuration}");
     CleanDirectories($"./src/**/bin/{data.Configuration}");
     CleanDirectory(data.Paths.Directories.Artifacts);
+	
+	
+if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+{
+    Information(
+        @"Repository:
+        Branch: {0}
+        Name: {1}
+        Provider: {2}
+        Scm: {3}",
+        BuildSystem.AppVeyor.Environment.Repository.Branch,
+        BuildSystem.AppVeyor.Environment.Repository.Name,
+        BuildSystem.AppVeyor.Environment.Repository.Provider,
+        BuildSystem.AppVeyor.Environment.Repository.Scm
+        );
+}
+else
+{
+    Information("Not running on AppVeyor");
+}
+
 });
 
 Task("CleanAll")
