@@ -19,4 +19,4 @@ test:
     only:
     - '**\*RedisSagas.Tests.dll'
 artifacts:
-- path: 'build_artifacts\*.nupkg'
+- path: 'artifacts\*.nupkg'
