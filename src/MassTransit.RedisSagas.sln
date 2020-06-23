@@ -6,13 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RedisSagas", "RedisSagas", "{BE8C8157-29B1-42E1-8813-08261F5CDBF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A7042F9-F926-4544-9F28-11156011B350}"
-	ProjectSection(SolutionItems) = preProject
-		..\build.fsx = ..\build.fsx
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas.Tests", "MassTransit.RedisSagas.Tests\MassTransit.RedisSagas.Tests.csproj", "{83A328B2-18C0-4A40-B576-3B51CBD7FD21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.RedisSagas", "MassTransit.RedisSagas\MassTransit.RedisSagas.csproj", "{441ABAEA-C2FB-42D9-A4FA-5B613775948C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.RedisSagas", "MassTransit.RedisSagas\MassTransit.RedisSagas.csproj", "{441ABAEA-C2FB-42D9-A4FA-5B613775948C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -23,7 +23,7 @@ namespace MassTransit.RedisSagas.Tests
         {
         }
 
-        public InitiateSimpleSaga(Guid correlationId) : base(correlationId)
+        public  InitiateSimpleSaga(Guid correlationId) : base(correlationId)
         {
         }
 
