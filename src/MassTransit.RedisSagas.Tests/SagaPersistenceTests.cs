@@ -31,7 +31,7 @@ namespace MassTransit.RedisSagas.Tests
                 EndPoints = {_redis.Endpoint}
             });
             var db = _clientManager.GetDatabase();
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(() => _clientManager.GetDatabase(0)));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(_clientManager));
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)

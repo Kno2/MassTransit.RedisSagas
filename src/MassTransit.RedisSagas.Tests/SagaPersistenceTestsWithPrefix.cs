@@ -29,7 +29,7 @@ namespace MassTransit.RedisSagas.Tests
             {
                 EndPoints = { _redis.Endpoint }
             });
-            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(() => clientManager.GetDatabase(), keyPrefix: "test", optimistic: false, lockTimeout: TimeSpan.FromSeconds(30), expiry:TimeSpan.FromDays(14)));
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() => new RedisSagaRepository<SimpleSaga>(clientManager, keyPrefix: "test", optimistic: false, lockTimeout: TimeSpan.FromSeconds(30), expiry:TimeSpan.FromDays(14)));
 
         }
 

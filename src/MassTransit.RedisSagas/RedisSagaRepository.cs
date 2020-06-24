@@ -15,7 +15,7 @@
         readonly ISagaRepository<TSaga> _repository;
         readonly RedisSagaRepositoryContextFactory<TSaga> _repositoryContextFactory;
 
-        public RedisSagaRepository(Func<IDatabase> redisDbFactory, bool optimistic = true, TimeSpan? lockTimeout = null, TimeSpan? lockRetryTimeout = null,
+        public RedisSagaRepository(IConnectionMultiplexer redisConnection, bool optimistic = true, TimeSpan? lockTimeout = null, TimeSpan? lockRetryTimeout = null,
             string keyPrefix = "", TimeSpan? expiry = null)
         {
             var options = new RedisSagaRepositoryOptions<TSaga>(optimistic ? ConcurrencyMode.Optimistic : ConcurrencyMode.Pessimistic, lockTimeout, null,
@@ -23,7 +23,7 @@
 
             var consumeContextFactory = new RedisSagaConsumeContextFactory<TSaga>();
 
-            _repositoryContextFactory = new RedisSagaRepositoryContextFactory<TSaga>(redisDbFactory, consumeContextFactory, options);
+            _repositoryContextFactory = new RedisSagaRepositoryContextFactory<TSaga>(redisConnection, consumeContextFactory, options);
 
             _repository = new SagaRepository<TSaga>(_repositoryContextFactory);
         }
